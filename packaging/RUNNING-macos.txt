@@ -1,20 +1,40 @@
 HarmonicaScript - macOS
 
-  HarmonicaScript.app       graphical interface - double-click it
+  HarmonicaScript.app       graphical interface - see the note below before double-clicking
   ./hsc                     command line  ("./hsc --help")
 
-Nothing to install: the .NET runtime is included inside the bundle.
+Nothing to install: the .NET runtime is included inside the bundle. hsc is a symlink into
+HarmonicaScript.app/Contents/MacOS/, so keep the two together.
 
-hsc is a symlink into HarmonicaScript.app/Contents/MacOS/, so keep the two together.
 
-The build is unsigned and unnotarised, so macOS quarantines it. Clear that once, from inside
-the extracted folder:
+FIRST LAUNCH
+------------
+This build is ad-hoc signed but NOT notarised - notarising requires a paid Apple Developer ID.
+macOS will therefore refuse the first launch of anything you downloaded with a browser. Pick one:
+
+  Right-click (or Control-click) HarmonicaScript.app, choose "Open", then "Open" again.
+  You only have to do this once.
+
+or, from the extracted folder, clear the download quarantine for everything at once:
 
   xattr -dr com.apple.quarantine .
 
-Note that the game itself is Windows-only. On macOS you can convert, audition and export;
-the live playback backend here is a development aid, not a way to play the game.
+If macOS instead says the app is DAMAGED and should be moved to the Trash, that is a broken
+signature rather than a Gatekeeper prompt - please open an issue, because it means the release
+was built incorrectly.
 
-data/ holds the instrument and timing profiles. They are plain JSON and you are MEANT to edit
-them - every number describing the game is inferred rather than measured. Run
-"./hsc profile dump --effective" to see where each value came from, and read docs/CALIBRATION.md.
+
+THE GAME IS WINDOWS-ONLY
+------------------------
+On macOS you can convert, audition and export. The live playback backend here is a development
+aid, not a way to play the game.
+
+
+CONFIGURATION
+-------------
+data/ inside the bundle holds the instrument and timing profiles. They are plain JSON and you
+are MEANT to edit them - every number describing the game is inferred rather than measured.
+
+  ./hsc profile dump --effective     shows where each value came from
+
+Read docs/CALIBRATION.md.

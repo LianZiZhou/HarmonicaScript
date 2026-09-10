@@ -3,10 +3,15 @@
 #
 # Two decisions worth stating up front:
 #
-#   * All six targets are CROSS-PUBLISHED FROM ONE UBUNTU RUNNER. Ordinary IL self-contained
-#     publishing cross-compiles fine (only NativeAOT cannot), so a six-runner matrix would cost
-#     six times as much for an identical result. This is the same path the developer uses to cut
-#     releases from a Mac, so CI exercises the real mechanism rather than a parallel one.
+#   * Windows and Linux targets are CROSS-PUBLISHED FROM UBUNTU. Ordinary IL self-contained
+#     publishing cross-compiles fine (only NativeAOT cannot), so putting each on its own runner
+#     would cost more for an identical result.
+#
+#     The two macOS targets are the exception, and not for compilation reasons: a .app bundle
+#     must be code-signed as a BUNDLE, and `codesign` exists only on macOS. Cross-published from
+#     Ubuntu the apphost carries .NET's ad-hoc signature but the bundle has no sealed resources,
+#     so macOS reports "code has no resources but signature indicates they must be present" and
+#     tells the user the app is damaged and should be moved to the Trash.
 #
 #   * The GUI and the CLI are published into ONE folder per target. They share the entire runtime,
 #     so shipping them together costs ~1 MB over the GUI alone instead of ~35 MB, and a user gets
@@ -46,17 +51,17 @@ jobs:
   build:
     name: ${{ matrix.rid }}
     needs: test
-    runs-on: ubuntu-24.04
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - { rid: win-x64,     running: RUNNING-windows.txt }
-          - { rid: win-arm64,   running: RUNNING-windows.txt }
-          - { rid: osx-x64,     running: RUNNING-macos.txt   }
-          - { rid: osx-arm64,   running: RUNNING-macos.txt   }
-          - { rid: linux-x64,   running: RUNNING-linux.txt   }
-          - { rid: linux-arm64, running: RUNNING-linux.txt   }
+          - { rid: win-x64,     os: ubuntu-24.04, running: RUNNING-windows.txt }
+          - { rid: win-arm64,   os: ubuntu-24.04, running: RUNNING-windows.txt }
+          - { rid: osx-x64,     os: macos-26,     running: RUNNING-macos.txt   }
+          - { rid: osx-arm64,   os: macos-26,     running: RUNNING-macos.txt   }
+          - { rid: linux-x64,   os: ubuntu-24.04, running: RUNNING-linux.txt   }
+          - { rid: linux-arm64, os: ubuntu-24.04, running: RUNNING-linux.txt   }
 
     steps:
       - uses: actions/checkout@v7
@@ -143,6 +148,25 @@ jobs:
           # The bundle must be a DIRECTORY with the executable at Contents/MacOS/<CFBundleExecutable>.
           test -d "$APP" || { echo "::error::$APP is not a directory"; exit 1; }
           test -x "$APP/Contents/MacOS/HarmonicaScript" || { echo "::error::bundle executable missing or not executable"; exit 1; }
+
+          # Ad-hoc sign the WHOLE BUNDLE. .NET already ad-hoc signs the apphost, but that
+          # signature covers the executable alone: the bundle ends up with "Sealed Resources=none"
+          # and "Info.plist=not bound", which macOS rejects with "code has no resources but
+          # signature indicates they must be present" and reports to the user as
+          # 「已损坏，无法打开。你应该将它移到废纸篓」 - a dead end with no way forward.
+          #
+          # Ad-hoc (-s -) is as far as we can go without a paid Developer ID. It does NOT make
+          # the app notarised, so Gatekeeper still blocks the first launch - but with the ordinary
+          # "unidentified developer" prompt that right-click -> Open resolves, instead of telling
+          # the user their download is corrupt.
+          codesign --force --deep --sign - "$APP"
+          codesign --verify --deep --strict --verbose=2 "$APP"
+          codesign -dv --verbose=2 "$APP" 2>&1 | grep -E 'Signature=|Sealed Resources'
+
+          if codesign -dv --verbose=2 "$APP" 2>&1 | grep -q 'Sealed Resources=none'; then
+            echo "::error::the bundle signature seals no resources; macOS will call it damaged"
+            exit 1
+          fi
 
       - name: Add the documents a user needs beside the binaries
         env:

@@ -128,7 +128,21 @@ jobs:
           # A relative symlink so the CLI is reachable without digging into the bundle.
           ln -s "HarmonicaScript.app/Contents/MacOS/hsc" "$STAGE/hsc"
 
-          plutil -lint "$APP/Contents/Info.plist"
+          # NOT plutil: that is a macOS-only tool and this job cross-publishes from Ubuntu.
+          # plistlib parses the plist structure rather than merely checking the XML, and asserts
+          # the two keys that decide whether macOS will launch the bundle at all.
+          python3 - "$APP/Contents/Info.plist" <<'PYEOF'
+          import plistlib, sys
+          with open(sys.argv[1], 'rb') as f:
+              plist = plistlib.load(f)
+          assert plist['CFBundleExecutable'] == 'HarmonicaScript', plist.get('CFBundleExecutable')
+          assert plist['CFBundlePackageType'] == 'APPL', plist.get('CFBundlePackageType')
+          print(f"Info.plist OK: {plist['CFBundleIdentifier']} v{plist['CFBundleVersion']}")
+          PYEOF
+
+          # The bundle must be a DIRECTORY with the executable at Contents/MacOS/<CFBundleExecutable>.
+          test -d "$APP" || { echo "::error::$APP is not a directory"; exit 1; }
+          test -x "$APP/Contents/MacOS/HarmonicaScript" || { echo "::error::bundle executable missing or not executable"; exit 1; }
 
       - name: Add the documents a user needs beside the binaries
         env:

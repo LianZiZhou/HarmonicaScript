@@ -437,3 +437,79 @@ The suspicion that the Windows x64 zip was undersized did not survive measuremen
 Nothing is missing from it. The spread across targets is just per-RID native payload: Skia,
 HarfBuzz and, on Windows only, ANGLE (`av_libglesv2.dll`, ~5 MB), which is why the two Windows
 builds carry six native libraries where the others carry five.
+
+---
+
+## "已损坏，无法打开" — the macOS signature, in three layers
+
+After the `.app` bundle landed, a browser download still failed, now with
+「"HarmonicaScript" 已损坏，无法打开。你应该将它移到废纸篓。」 That message is macOS's wording for
+an **invalid code signature**, not for a missing one — and it offers the user nothing but the
+Trash. It took three distinct fixes, each exposing the next.
+
+### Layer 1 — the bundle was not signed, only the executable inside it
+
+`.NET` ad-hoc signs the apphost even when cross-published from Linux, so the binaries looked
+signed. But the *bundle* had `Sealed Resources=none` and `Info.plist=not bound`, and codesign
+rejects that combination outright:
+
+```
+as-shipped.app: code has no resources but signature indicates they must be present
+```
+
+Fixed with `codesign --force --deep --sign -`. `codesign` is macOS-only, so the two osx targets
+moved from the Ubuntu runner to `macos-26` — a split for **signing**, not for compilation.
+
+### Layer 2 — the signature verified on the runner and was broken on arrival
+
+The next build sealed its resources and still failed after download:
+
+```
+HarmonicaScript.app: code object is not signed at all
+In subcomponent: .../Contents/MacOS/HarmonicaScript.Audition.dll
+```
+
+`HarmonicaScript.Audition.dll` is a **PE32 .NET assembly, not Mach-O**. codesign insists every
+`.dll` in the bundle is nested code requiring a signature — signing without `--deep` fails
+outright on it — but a PE file has nowhere to embed one, so `--deep` writes it to the
+`com.apple.cs.CodeSignature` **extended attribute**. `zip` cannot carry extended attributes.
+
+So the bundle was valid on the runner and invalid by the time anyone downloaded it. **Verifying
+before archiving is precisely the check that passed while shipping a broken download.**
+
+Measured from a pristine bundle, each through a zip round-trip:
+
+| signing | after zip | Gatekeeper |
+|---|---|---|
+| unsigned | `deepVerify=FAIL` | *code has no resources but signature indicates they must be present* |
+| `--sign -` (shallow) | signing fails outright on the nested `.dll` | — |
+| `--deep --sign -` + `zip` | `deepVerify=FAIL` | xattr signatures dropped |
+| `--deep --sign -` + `ditto` | **`deepVerify=PASS`** | xattr signatures preserved |
+
+Fixed by archiving macOS with `ditto -c -k --sequesterRsrc --keepParent` — Apple's own tool, and
+what Finder uses when a user double-clicks the archive. Windows and Linux keep an ordinary zip;
+none of this applies to them.
+
+A CI step now extracts the **finished archive** with `ditto -x -k` and runs
+`codesign --verify --deep --strict` on the result, so the assertion is about what the user
+receives rather than what the runner produced.
+
+### Layer 3 — what remains, stated honestly
+
+Verified against the published artefact after a real download and a Finder-style extract:
+
+```
+Signature=adhoc
+Sealed Resources version=2 rules=13 files=264
+HarmonicaScript.app: valid on disk
+HarmonicaScript.app: satisfies its Designated Requirement
+```
+
+`spctl` still says `rejected`, and that is correct and expected: ad-hoc is as far as this can go
+without a paid Developer ID, so the app is not notarised and Gatekeeper still blocks the first
+launch. The difference is that it now does so with the ordinary "unidentified developer" prompt
+that right-click → Open resolves, instead of telling the user their download is corrupt.
+
+One residual limitation, documented in `RUNNING.txt` rather than papered over: extracting with the
+command-line `unzip` drops the extended attributes again and reproduces the damaged state. Finder,
+`ditto -x -k`, or `xattr -dr com.apple.quarantine .` all work.

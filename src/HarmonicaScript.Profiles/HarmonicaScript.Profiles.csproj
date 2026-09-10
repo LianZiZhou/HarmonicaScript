@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <HsAotClean>true</HsAotClean>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../HarmonicaScript.Core/HarmonicaScript.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <!--
+      The shipped defaults are embedded so the app works from a bare exe, AND written to
+      data/ next to the exe so a user can edit them. Layer 1 of the override chain is
+      always the embedded copy, which is why a broken edit can never brick the app.
+    -->
+    <EmbeddedResource Include="../../data/**/*.json" LinkBase="Embedded" />
+  </ItemGroup>
+</Project>

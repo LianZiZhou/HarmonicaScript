@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../../src/HarmonicaScript.Core/HarmonicaScript.Core.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Profiles/HarmonicaScript.Profiles.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Midi/HarmonicaScript.Midi.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Export/HarmonicaScript.Export.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Playback/HarmonicaScript.Playback.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Playback.Windows/HarmonicaScript.Playback.Windows.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Playback.MacOs/HarmonicaScript.Playback.MacOs.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Project/HarmonicaScript.Project.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Audition/HarmonicaScript.Audition.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.App/HarmonicaScript.App.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Cli/HarmonicaScript.Cli.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="Mono.Cecil" />
+  </ItemGroup>
+</Project>

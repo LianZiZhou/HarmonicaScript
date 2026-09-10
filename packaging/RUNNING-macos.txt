@@ -1,0 +1,18 @@
+HarmonicaScript - macOS
+
+  ./HarmonicaScript.App     graphical interface
+  ./hsc                     command line  ("./hsc --help")
+
+Nothing to install: the .NET runtime is included in this folder.
+
+The build is unsigned and unnotarised, so macOS quarantines it. Clear that once, from inside
+the extracted folder:
+
+  xattr -dr com.apple.quarantine .
+
+Note that the game itself is Windows-only. On macOS you can convert, audition and export;
+the live playback backend here is a development aid, not a way to play the game.
+
+data/ holds the instrument and timing profiles. They are plain JSON and you are MEANT to edit
+them - every number describing the game is inferred rather than measured. Run
+"./hsc profile dump --effective" to see where each value came from, and read docs/CALIBRATION.md.

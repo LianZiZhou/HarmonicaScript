@@ -1,0 +1,72 @@
+transpose        0
+keyDistance      0
+hardInfeasible   0
+musicalLossPpm   0
+grade            A (100)
+notes            20/20
+dropped/folded   0/0
+merged/shifted   0/0
+modifierEvents   14
+exclusiveSwaps   0
+totalEvents      54
+durationMs       12073
+
+counters
+  fit.search.candidates              54
+  reduce.iterations                  1
+
+first 60 events
+         0 ModifierDown Right    down  note=-1
+        12 NoteDown     C        down  note=0
+       403 NoteUp       C        up    note=0
+       421 ModifierDown Middle   down  note=-1
+       429 NoteDown     X        down  note=1
+       819 NoteUp       X        up    note=1
+       837 ModifierUp   Middle   up    note=-1
+       845 NoteDown     C        down  note=2
+      1236 NoteUp       C        up    note=2
+      1254 ModifierDown Middle   down  note=-1
+      1262 NoteDown     X        down  note=3
+      1653 NoteUp       X        up    note=3
+      1671 ModifierUp   Middle   up    note=-1
+      1679 NoteDown     C        down  note=4
+      2069 NoteUp       C        up    note=4
+      2079 ModifierUp   Right    up    note=-1
+      2095 NoteDown     M        down  note=5
+      2486 NoteUp       M        up    note=5
+      2500 ModifierDown Right    down  note=-1
+      2512 NoteDown     X        down  note=6
+      2903 NoteUp       X        up    note=6
+      2913 ModifierUp   Right    up    note=-1
+      2929 NoteDown     Comma    down  note=7
+      3319 NoteUp       Comma    up    note=7
+      3345 NoteDown     N        down  note=8
+      4517 NoteUp       N        up    note=8
+      5012 NoteDown     Z        down  note=9
+      5403 NoteUp       Z        up    note=9
+      5429 NoteDown     C        down  note=10
+      5819 NoteUp       C        up    note=10
+      5845 NoteDown     N        down  note=11
+      6236 NoteUp       N        up    note=11
+      6262 NoteDown     M        down  note=12
+      7434 NoteUp       M        up    note=12
+      7929 NoteDown     C        down  note=13
+      8319 NoteUp       C        up    note=13
+      8337 ModifierDown Middle   down  note=-1
+      8345 NoteDown     B        down  note=14
+      8736 NoteUp       B        up    note=14
+      8754 ModifierUp   Middle   up    note=-1
+      8762 NoteDown     M        down  note=15
+      9153 NoteUp       M        up    note=15
+      9179 NoteDown     Comma    down  note=16
+     10351 NoteUp       Comma    up    note=16
+     10845 NoteDown     C        down  note=17
+     11236 NoteUp       C        up    note=17
+     11250 ModifierDown Right    down  note=-1
+     11262 NoteDown     C        down  note=18
+     11653 NoteUp       C        up    note=18
+     11671 ModifierDown Middle   down  note=-1
+     11679 NoteDown     X        down  note=19
+     12069 NoteUp       X        up    note=19
+     12069 ModifierUp   Middle   up    note=-1
+     12073 ModifierUp   Right    up    note=-1

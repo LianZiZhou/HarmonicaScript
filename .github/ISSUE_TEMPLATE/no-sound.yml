@@ -1,0 +1,26 @@
+name: 没有声音 / No sound in game
+description: 运行了实时演奏但游戏里没有反应 / Playback ran but nothing happened in the game
+labels: [branch-a, no-sound]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        「没反应」有五个完全不同的原因，症状完全一样。请先运行 `hsc selftest`，它会逐级排查。
+        There are five distinct causes with one identical symptom. Run `hsc selftest` first.
+  - type: textarea
+    id: diag
+    attributes:
+      label: 诊断包 / Diagnostic bundle
+      description: |
+        运行 `hsc diag`，它会在本地生成一个 zip 并打开文件夹（**不会上传任何东西**），请手动附在这里。
+        Run `hsc diag`. It writes a zip locally and opens the folder. It uploads nothing. Attach it here.
+    validations: { required: true }
+  - type: dropdown
+    id: selftest
+    attributes:
+      label: 自检结果 / Self-test result
+      options:
+        - "rung 0 记事本测试失败 / Notepad delivery test failed"
+        - "rung 0 通过，但游戏里仍无声 / Notepad passed, still silent in game"
+        - "没跑自检 / Did not run it"
+    validations: { required: true }

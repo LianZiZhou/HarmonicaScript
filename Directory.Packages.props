@@ -1,0 +1,73 @@
+<Project>
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+
+  <ItemGroup Label="MIDI">
+    <!--
+      File parser ONLY. ExcludeAssets="build" strips build/*.targets, which otherwise
+      copies Native32.dll / Native64.dll / Native64.dylib into every output directory
+      on every platform. We never touch Melanchall.DryWetMidi.Multimedia (banned in
+      HarmonicaScript.Midi via BannedSymbols.txt), so the natives are pure liability.
+      9.0.0 is still prerelease; its TFM set is still moving between prereleases.
+    -->
+    <PackageVersion Include="Melanchall.DryWetMidi" Version="8.0.3" />
+  </ItemGroup>
+
+  <ItemGroup Label="UI">
+    <!--
+      D1: Avalonia 11.3.21, not 12.1.2. Avalonia.Diagnostics (the free DevTools
+      visual-tree inspector) has NO 12.x release - 11.3.21 is the ceiling - and this
+      project ships a full note editor, where a visual-tree inspector is real
+      productivity. 11.3.21 targets netstandard2.0/net6.0/net8.0 and runs fine on
+      net10.0. Migration to 12.x is re-evaluated at M15.
+      NB: Avalonia.Controls.DataGrid's 11.3.x line stops at 11.3.13 (MIT, requires
+      Avalonia >= 11.3.13), so it is pinned one patch band behind core Avalonia.
+      NEVER Avalonia.Controls.TreeDataGrid - paid, hard dep on AvaloniaUI.Licensing.
+      NEVER Avalonia.Headless.* - it is the one dependency that would couple the whole
+      test suite to the Avalonia version and drag in an xunit v2/v3 pin conflict.
+    -->
+    <PackageVersion Include="Avalonia" Version="11.3.21" />
+    <PackageVersion Include="Avalonia.Desktop" Version="11.3.21" />
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="11.3.21" />
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="11.3.21" />
+    <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.21" />
+    <PackageVersion Include="Avalonia.Controls.DataGrid" Version="11.3.13" />
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageVersion Include="HotAvalonia" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup Label="Audition">
+    <PackageVersion Include="MeltySynth" Version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup Label="CLI">
+    <PackageVersion Include="System.CommandLine" Version="2.0.12" />
+  </ItemGroup>
+
+  <ItemGroup Label="Platform">
+    <PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.333" />
+    <!-- NB: System.Text.Encoding.CodePages is IN the .NET 10 shared framework (NU1510 if
+         referenced explicitly). CodePagesEncodingProvider for GB18030 is available without a
+         package reference; it still must be registered at startup. -->
+  </ItemGroup>
+
+  <ItemGroup Label="Analyzers">
+    <PackageVersion Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="5.6.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="Test">
+    <PackageVersion Include="xunit.v3" Version="4.0.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.0" />
+    <!-- Golden files. Package id is Verify.XunitV3 (Verify.Xunit.v3 does not exist);
+         latest STABLE is 32.0.0 - the version list also contains 33.0.0-beta.x. -->
+    <PackageVersion Include="Verify.XunitV3" Version="32.0.0" />
+    <PackageVersion Include="CsCheck" Version="4.8.0" />
+    <!-- Policy.Tests only: architectural bans are tests, not prose in a table. -->
+    <PackageVersion Include="Mono.Cecil" Version="0.11.6" />
+  </ItemGroup>
+
+</Project>

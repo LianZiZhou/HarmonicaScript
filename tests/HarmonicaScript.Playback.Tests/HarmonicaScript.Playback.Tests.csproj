@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../../src/HarmonicaScript.Playback/HarmonicaScript.Playback.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Playback.Windows/HarmonicaScript.Playback.Windows.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Playback.MacOs/HarmonicaScript.Playback.MacOs.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Core/HarmonicaScript.Core.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Project/HarmonicaScript.Project.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="HarmonicaScript.Playback.Windows" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <HsAotClean>true</HsAotClean>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../HarmonicaScript.Core/HarmonicaScript.Core.csproj" />
+    <ProjectReference Include="../HarmonicaScript.Profiles/HarmonicaScript.Profiles.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,14 @@
+* text=auto eol=lf
+
+# Verify golden files must never be normalised or diff-munged.
+*.verified.*   -text
+*.received.*   -text linguist-generated
+
+# Binary fixtures
+*.mid          binary
+*.wav          binary
+*.sf2          binary
+*.png          binary
+
+# Vendor macro samples are byte-exact evidence. Never touch them.
+testdata/vendor-samples/**  -text

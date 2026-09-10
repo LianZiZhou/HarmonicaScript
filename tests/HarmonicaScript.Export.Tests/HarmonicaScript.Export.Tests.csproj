@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../../src/HarmonicaScript.Export/HarmonicaScript.Export.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Core/HarmonicaScript.Core.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Profiles/HarmonicaScript.Profiles.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Project/HarmonicaScript.Project.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+</Project>

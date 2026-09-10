@@ -1,0 +1,80 @@
+transpose        0
+keyDistance      0
+hardInfeasible   0
+musicalLossPpm   0
+grade            A (100)
+notes            64/64
+dropped/folded   0/0
+merged/shifted   0/0
+modifierEvents   134
+exclusiveSwaps   63
+totalEvents      262
+durationMs       15976
+
+counters
+  emit.holdCaps.modifierBreaks       2
+  fit.search.candidates              73
+  reduce.iterations                  1
+  sched.breath.inserted              1
+
+first 60 events
+         0 ModifierDown Left     down  note=-1
+         4 ModifierDown Middle   down  note=-1
+        16 NoteDown     Z        down  note=0
+       226 NoteUp       Z        up    note=0
+       246 ModifierUp   Left     up    note=-1
+       250 ModifierDown Right    down  note=-1
+       266 NoteDown     M        down  note=1
+       476 NoteUp       M        up    note=1
+       496 ModifierUp   Right    up    note=-1
+       500 ModifierDown Left     down  note=-1
+       516 NoteDown     Z        down  note=2
+       726 NoteUp       Z        up    note=2
+       746 ModifierUp   Left     up    note=-1
+       750 ModifierDown Right    down  note=-1
+       766 NoteDown     M        down  note=3
+       976 NoteUp       M        up    note=3
+       996 ModifierUp   Right    up    note=-1
+      1000 ModifierDown Left     down  note=-1
+      1016 NoteDown     Z        down  note=4
+      1226 NoteUp       Z        up    note=4
+      1246 ModifierUp   Left     up    note=-1
+      1250 ModifierDown Right    down  note=-1
+      1266 NoteDown     M        down  note=5
+      1476 NoteUp       M        up    note=5
+      1496 ModifierUp   Right    up    note=-1
+      1500 ModifierDown Left     down  note=-1
+      1516 NoteDown     Z        down  note=6
+      1726 NoteUp       Z        up    note=6
+      1746 ModifierUp   Left     up    note=-1
+      1750 ModifierDown Right    down  note=-1
+      1766 NoteDown     M        down  note=7
+      1976 NoteUp       M        up    note=7
+      1996 ModifierUp   Right    up    note=-1
+      2000 ModifierDown Left     down  note=-1
+      2016 NoteDown     Z        down  note=8
+      2226 NoteUp       Z        up    note=8
+      2246 ModifierUp   Left     up    note=-1
+      2250 ModifierDown Right    down  note=-1
+      2266 NoteDown     M        down  note=9
+      2476 NoteUp       M        up    note=9
+      2496 ModifierUp   Right    up    note=-1
+      2500 ModifierDown Left     down  note=-1
+      2516 NoteDown     Z        down  note=10
+      2726 NoteUp       Z        up    note=10
+      2746 ModifierUp   Left     up    note=-1
+      2750 ModifierDown Right    down  note=-1
+      2766 NoteDown     M        down  note=11
+      2976 NoteUp       M        up    note=11
+      2996 ModifierUp   Right    up    note=-1
+      3000 ModifierDown Left     down  note=-1
+      3016 NoteDown     Z        down  note=12
+      3226 NoteUp       Z        up    note=12
+      3246 ModifierUp   Left     up    note=-1
+      3250 ModifierDown Right    down  note=-1
+      3266 NoteDown     M        down  note=13
+      3476 NoteUp       M        up    note=13
+      3496 ModifierUp   Right    up    note=-1
+      3500 ModifierDown Left     down  note=-1
+      3516 NoteDown     Z        down  note=14
+      3726 NoteUp       Z        up    note=14

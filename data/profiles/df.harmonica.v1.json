@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "id": "df.harmonica.v1",
+  "profileVersion": 1,
+  "gameProfileId": "df.v1",
+  "validatedAgainstGameBuild": "unverified",
+  "displayName": {
+    "zh-Hans": "三角洲行动 · 守夜人的口风琴",
+    "en": "Delta Force · Nightwatchman's Melodica"
+  },
+
+  "$comment": [
+    "P0 is cosmetic in a relative model: the engine transposes, so the instrument's true concert",
+    "pitch never has to be known. 60 (C4) is a readable default.",
+    "Structural facts this profile derives (asserted by a pinned fixture test):",
+    "  6 modifier states, 38 offsets [-12,+25] with zero interior gaps, 48 renderings,",
+    "  multiplicity {1:30, 2:6, 3:2}, 2-way exactly {-7,1,5,13,17,24}, 3-way exactly {0,12}.",
+    "Because the degrees are pairwise distinct, a modifier state uniquely determines the key."
+  ],
+  "baseMidiNote": 60,
+
+  "degrees": [
+    { "index": 1, "semitone": 0,  "jianpu": "1",  "bind": { "device": "keyboard", "hid": 29 } },
+    { "index": 2, "semitone": 2,  "jianpu": "2",  "bind": { "device": "keyboard", "hid": 27 } },
+    { "index": 3, "semitone": 4,  "jianpu": "3",  "bind": { "device": "keyboard", "hid": 6  } },
+    { "index": 4, "semitone": 5,  "jianpu": "4",  "bind": { "device": "keyboard", "hid": 25 } },
+    { "index": 5, "semitone": 7,  "jianpu": "5",  "bind": { "device": "keyboard", "hid": 5  } },
+    { "index": 6, "semitone": 9,  "jianpu": "6",  "bind": { "device": "keyboard", "hid": 17 } },
+    { "index": 7, "semitone": 11, "jianpu": "7",  "bind": { "device": "keyboard", "hid": 16 } },
+    { "index": 8, "semitone": 12, "jianpu": "1^", "bind": { "device": "keyboard", "hid": 54 } }
+  ],
+
+  "modifiers": [
+    {
+      "id": "octaveDown",
+      "displayName": { "zh-Hans": "降调", "en": "Octave down" },
+      "semitoneDelta": -12,
+      "bind": { "device": "mouse", "button": "Left" },
+      "behavior": "hold",
+      "exclusionGroup": 1,
+      "pressLeadMs": 12,
+      "releaseLeadMs": 16,
+      "dutyWeightMilli": 120,
+      "$dutyComment": "3x the others ON PURPOSE: left mouse is FIRE in this game, so the objective must actively avoid parking a melody in the low band."
+    },
+    {
+      "id": "semitone",
+      "displayName": { "zh-Hans": "半音", "en": "Semitone" },
+      "semitoneDelta": 1,
+      "bind": { "device": "mouse", "button": "Middle" },
+      "behavior": "hold",
+      "exclusionGroup": 0,
+      "pressLeadMs": 8,
+      "releaseLeadMs": 8,
+      "dutyWeightMilli": 40
+    },
+    {
+      "id": "octaveUp",
+      "displayName": { "zh-Hans": "升调", "en": "Octave up" },
+      "semitoneDelta": 12,
+      "bind": { "device": "mouse", "button": "Right" },
+      "behavior": "hold",
+      "exclusionGroup": 1,
+      "pressLeadMs": 12,
+      "releaseLeadMs": 16,
+      "dutyWeightMilli": 40
+    }
+  ],
+
+  "maxSimultaneousModifiers": 2,
+  "modifiersRepitchSustainedNotes": true,
+  "$repitchComment": "Conservative assumption: a modifier armed during a previous note's sustain re-pitches that sounding note. If false, the planner may arm modifiers earlier. Unverified - see docs/CALIBRATION.md.",
+
+  "provenance": {
+    "confidence": "inferred",
+    "verifiedInGame": false,
+    "sources": [
+      "ChickenD233/harmonica-auto-player README and its bundled 口琴钢琴测试台.html simulator (KEY_DEG / pitchFrom / minP / maxP)",
+      "User screenshots of the in-game harmonica UI",
+      "User confirmation that the three mouse modifiers are momentary (hold)"
+    ]
+  }
+}

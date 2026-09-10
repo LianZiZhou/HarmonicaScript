@@ -1,0 +1,30 @@
+name: 提供厂商宏样本 / Contribute a vendor macro sample
+description: 提交一份真实导出的宏文件，用来实现或修正某个厂商导出器
+labels: [branch-b, vendor-sample]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        我们**只**根据真实样本写导出器，绝不猜测格式。请按下面的录制配方录制，
+        延时数字是互质的，这样每个字段都能被单独辨认出来。
+
+        We write exporters from real samples only, never from guesses. Use this recipe —
+        the delays are deliberately co-prime so every field is individually identifiable.
+
+        ```
+        宏 1：按下 Z，等 137 ms，松开 Z，等 251 ms，按下 X，等 61 ms，松开 X
+        宏 2：按住鼠标右键 173 ms 后松开，按住鼠标中键 89 ms 后松开
+        录制时请打开「记录延时 / record delays」。
+        ```
+
+        **鼠标右键/中键的样本是目前最缺的** —— Razer、Bloody、Logitech 三个导出器都卡在这上面。
+  - type: input
+    id: vendor
+    attributes: { label: 厂商与软件版本 / Vendor and software version }
+    validations: { required: true }
+  - type: textarea
+    id: package
+    attributes:
+      label: 样本包 / Sample package
+      description: 运行 `hsc contrib package --vendor <id>`，把生成的 zip 附在这里。
+    validations: { required: true }

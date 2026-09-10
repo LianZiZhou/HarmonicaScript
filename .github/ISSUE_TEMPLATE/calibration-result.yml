@@ -1,0 +1,22 @@
+name: 实机校准结果 / Calibration result
+description: 你有 Windows 和游戏，跑了 docs/CALIBRATION.md 里的实验
+labels: [calibration]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        这是本项目**唯一**的外部验证通道。开发者没有 Windows 机器，
+        所以 `docs/CALIBRATION.md` 里的六个问题只能靠你回答。谢谢。
+  - type: dropdown
+    id: experiment
+    attributes:
+      label: 实验编号 / Experiment
+      options: [C1 SendInput 是否到达, C2 hold 还是 toggle, C3 是否正好 ±12, C4 重触发下限, C5 修饰键建立时间, C6 游戏是否提权]
+    validations: { required: true }
+  - type: textarea
+    id: answer
+    attributes: { label: 你听到/看到了什么 / What you heard or saw }
+    validations: { required: true }
+  - type: input
+    id: build
+    attributes: { label: 游戏版本 / Game build }

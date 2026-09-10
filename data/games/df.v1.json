@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "df.v1",
+  "displayName": { "zh-Hans": "三角洲行动", "en": "Delta Force" },
+  "$comment": "Game-varying facts live here, NOT in the instrument profile: process names and risk framing change on a different cadence from the instrument's key layout, and a second instrument in the same game must not duplicate them.",
+
+  "processNames": ["DeltaForceClient-Win64-Shipping", "DeltaForce", "df"],
+  "windowTitleHints": ["三角洲行动", "Delta Force"],
+  "antiCheat": "Tencent ACE (kernel level, disclosed on the Steam store page)",
+
+  "prohibitedSoftwareNotice": {
+    "zh-Hans": "腾讯官方《禁止/不建议使用的软硬件列表》同时点名「按键精灵、Autohotkey、键盘鼠标控制切换器、幽灵键鼠、大漠外挂程序、python 等自动脚本」与「鼠标宏」；Garena 版公告并列出「硬件宏」。本工具的两种模式都在禁止范围内。宏导出只是在检测层面更安静，不是政策上的安全港。",
+    "en": "Tencent's official prohibited-software list names both automation scripts (AutoHotkey, python) AND mouse macros; the Garena announcement also lists hardware macros. BOTH of this tool's modes fall inside that prohibition. Macro export is quieter in detection terms only - it is not a policy safe harbour."
+  },
+  "sources": [
+    "https://df.qq.com/gicp/news/1111/18503995.html",
+    "https://deltaforce.garena.com/zh_tw/news/announcement/94ABXR",
+    "https://store.steampowered.com/app/2507950/Delta_Force/"
+  ]
+}

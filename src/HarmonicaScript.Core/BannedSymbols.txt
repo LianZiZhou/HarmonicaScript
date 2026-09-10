@@ -1,0 +1,3 @@
+N:System.IO;Core is pure computation. File and stream access belongs in Profiles, Project, Midi or Cli.
+N:System.Net;The application makes no outbound network connection, ever (decision D12).
+N:System.Net.Http;The application makes no outbound network connection, ever (decision D12).

@@ -1,0 +1,243 @@
+# Builds every OS/architecture on every push and publishes the zips to a GitHub Release
+# versioned by the commit's short hash.
+#
+# Two decisions worth stating up front:
+#
+#   * All six targets are CROSS-PUBLISHED FROM ONE UBUNTU RUNNER. Ordinary IL self-contained
+#     publishing cross-compiles fine (only NativeAOT cannot), so a six-runner matrix would cost
+#     six times as much for an identical result. This is the same path the developer uses to cut
+#     releases from a Mac, so CI exercises the real mechanism rather than a parallel one.
+#
+#   * The GUI and the CLI are published into ONE folder per target. They share the entire runtime,
+#     so shipping them together costs ~1 MB over the GUI alone instead of ~35 MB, and a user gets
+#     both tools from one download.
+name: release
+
+on:
+  push:
+    # Branches only. A tag push would otherwise produce a second, redundant build of the same commit.
+    branches: ['**']
+  workflow_dispatch:
+
+# A newer push to the same branch supersedes this one; there is no point finishing a build nobody
+# will download.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+jobs:
+  # Gate. Publishing an artefact from a commit whose tests fail would put a broken build behind a
+  # permanent download link, and someone would eventually find it.
+  test:
+    name: test
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - run: dotnet test HarmonicaScript.slnx -c Release
+
+  build:
+    name: ${{ matrix.rid }}
+    needs: test
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { rid: win-x64,     running: RUNNING-windows.txt }
+          - { rid: win-arm64,   running: RUNNING-windows.txt }
+          - { rid: osx-x64,     running: RUNNING-macos.txt   }
+          - { rid: osx-arm64,   running: RUNNING-macos.txt   }
+          - { rid: linux-x64,   running: RUNNING-linux.txt   }
+          - { rid: linux-arm64, running: RUNNING-linux.txt   }
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Version from the commit
+        id: version
+        run: echo "sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Publish CLI and GUI into one folder
+        env:
+          SHA: ${{ steps.version.outputs.sha }}
+          RID: ${{ matrix.rid }}
+        run: |
+          set -euo pipefail
+          STAGE="stage/HarmonicaScript-$SHA-$RID"
+          mkdir -p "$STAGE"
+
+          # CLI first, GUI second. They share the runtime assemblies; the second publish
+          # overwrites them with byte-identical copies, and each app keeps its own
+          # .deps.json / .runtimeconfig.json.
+          for project in src/HarmonicaScript.Cli src/HarmonicaScript.App; do
+            dotnet publish "$project" \
+              -c Release -r "$RID" --self-contained true \
+              -p:PublishSingleFile=false \
+              -p:InformationalVersion="0.9.0+$SHA" \
+              -o "$STAGE"
+          done
+
+      - name: Fail if a DryWetMidi native blob leaked
+        env:
+          SHA: ${{ steps.version.outputs.sha }}
+          RID: ${{ matrix.rid }}
+        run: |
+          set -euo pipefail
+          STAGE="stage/HarmonicaScript-$SHA-$RID"
+          leaks=$(find "$STAGE" \( -iname 'Native32*' -o -iname 'Native64*' \) -print)
+          if [ -n "$leaks" ]; then
+            echo "::error::DryWetMidi native blobs leaked into the artefact:"
+            echo "$leaks"
+            exit 1
+          fi
+
+      - name: Add the documents a user needs beside the binaries
+        env:
+          SHA: ${{ steps.version.outputs.sha }}
+          RID: ${{ matrix.rid }}
+          RUNNING: ${{ matrix.running }}
+        run: |
+          set -euo pipefail
+          STAGE="stage/HarmonicaScript-$SHA-$RID"
+
+          cp README.md LICENSE NOTICE.md "$STAGE/"
+          mkdir -p "$STAGE/docs"
+          cp docs/CALIBRATION.md docs/PROVENANCE.md "$STAGE/docs/"
+
+          # The per-platform notes live in packaging/ rather than inline here: a heredoc nested
+          # inside a YAML block scalar cannot start at column 0 without terminating the block,
+          # and text a user actually reads deserves to be reviewable and diffable on its own.
+          cp "packaging/$RUNNING" "$STAGE/RUNNING.txt"
+
+      - name: Zip
+        env:
+          SHA: ${{ steps.version.outputs.sha }}
+          RID: ${{ matrix.rid }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          # zip from inside stage/ so the archive contains one top-level folder rather than
+          # scattering 260 files into whatever directory the user extracted it in.
+          ( cd stage && zip -qr "../dist/HarmonicaScript-$SHA-$RID.zip" "HarmonicaScript-$SHA-$RID" )
+          ls -lh "dist/HarmonicaScript-$SHA-$RID.zip"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: HarmonicaScript-${{ matrix.rid }}
+          path: dist/*.zip
+          retention-days: 14
+          compression-level: 0   # already a zip
+
+  publish:
+    name: publish release
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Compose the release
+        id: compose
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          SHA="${GITHUB_SHA::7}"
+
+          # The tag is prefixed rather than being the bare hash: git treats a tag that looks like
+          # an object id as ambiguous, and "warning: refname 'a1b2c3d' is ambiguous" on every
+          # checkout is a papercut nobody needs. The short hash is still the version everywhere
+          # a user actually sees it - the title and every filename.
+          TAG="build-$SHA"
+
+          cd dist
+          sha256sum *.zip > SHA256SUMS.txt
+
+          {
+            echo "sha=$SHA"
+            echo "tag=$TAG"
+          } >> "$GITHUB_OUTPUT"
+
+          SUBJECT=$(git log -1 --pretty=%s)
+
+          {
+            echo "Automatic build of \`$GITHUB_SHA\` on \`${GITHUB_REF_NAME}\`."
+            echo
+            echo "> $SUBJECT"
+            echo
+            echo "Each zip is fully self-contained - the .NET runtime is included, nothing to install -"
+            echo "and holds BOTH the GUI (\`HarmonicaScript.App\`) and the CLI (\`hsc\`), plus an editable"
+            echo "\`data/\` folder of instrument and timing profiles. Read \`RUNNING.txt\` first."
+            echo
+            echo "| file | size |"
+            echo "|---|---|"
+            for f in *.zip; do
+              echo "| \`$f\` | $(du -h "$f" | cut -f1) |"
+            done
+            echo
+            echo "<details><summary>SHA256</summary>"
+            echo
+            echo '```'
+            cat SHA256SUMS.txt
+            echo '```'
+            echo
+            echo "</details>"
+            echo
+            echo "---"
+            echo
+            echo "**未经实机验证 / Not verified in game.** The instrument mapping and every timing"
+            echo "constant are inferred, not measured. They are JSON data you can edit - run"
+            echo "\`hsc profile dump --effective\` to see where each value came from, and"
+            echo "\`docs/CALIBRATION.md\` for the six experiments that would settle them."
+            echo
+            echo "**风险提示 / Risk.** Tencent's official prohibited-software list for 三角洲行动 names"
+            echo "both automation scripts and mouse/hardware macros, so **both** of this tool's modes"
+            echo "fall inside it. Macro export is quieter in detection terms only - it is not a policy"
+            echo "safe harbour. This tool does nothing to evade detection and claims nothing about it."
+          } > BODY.md
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.compose.outputs.tag }}
+          SHA: ${{ steps.compose.outputs.sha }}
+        run: |
+          set -euo pipefail
+          cd dist
+
+          # Marked prerelease on purpose: these are per-commit CI builds, so leaving them as full
+          # releases would repoint the repository's "Latest release" badge on every push, including
+          # pushes to throwaway branches.
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "release $TAG exists (re-run); replacing its assets"
+            gh release edit "$TAG" --notes-file BODY.md --title "$SHA"
+            gh release upload "$TAG" ./*.zip SHA256SUMS.txt --clobber
+          else
+            gh release create "$TAG" ./*.zip SHA256SUMS.txt \
+              --title "$SHA" \
+              --notes-file BODY.md \
+              --target "$GITHUB_SHA" \
+              --prerelease
+          fi
+
+          echo "### Released \`$SHA\`" >> "$GITHUB_STEP_SUMMARY"
+          gh release view "$TAG" --json url --jq .url >> "$GITHUB_STEP_SUMMARY"

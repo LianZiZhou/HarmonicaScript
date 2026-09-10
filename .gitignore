@@ -1,0 +1,26 @@
+bin/
+obj/
+artifacts/
+stage/
+dist/
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.DotSettings.user
+.DS_Store
+
+# Verify writes these next to the golden file when a snapshot moves. They are
+# review material, never committed.
+*.received.*
+
+# Local-only extended MIDI corpus. testdata/corpus/manifest.json records hash and
+# provenance; the files themselves are not redistributable.
+testdata/corpus/*
+!testdata/corpus/manifest.json
+
+# Local SoundFont for the audition renderer (not redistributable).
+testdata/soundfonts/*
+!testdata/soundfonts/README.md
+TestResults/

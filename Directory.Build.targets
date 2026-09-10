@@ -1,0 +1,34 @@
+<Project>
+
+  <!--
+    AOT-clean discipline for the platform-free layers. These do not *publish* AOT
+    (see Directory.Build.props) but they are analysed as if they did, so reflection
+    and trim-hostile patterns fail the build at the moment they are introduced.
+  -->
+  <PropertyGroup Condition="'$(HsAotClean)' == 'true'">
+    <IsAotCompatible>true</IsAotCompatible>
+    <IsTrimmable>true</IsTrimmable>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <EnableAotAnalyzer>true</EnableAotAnalyzer>
+    <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+  </PropertyGroup>
+
+
+  <!--
+    Ship data/ next to the executable.
+
+    The profiles are ALSO embedded (layer 1 of the override chain), so the app works from a bare
+    exe and a broken edit degrades to a validation error rather than a dead app. But the whole
+    point of making the instrument data-driven is that a user can fix a wrong binding or a wrong
+    timing constant without waiting for a release - which they cannot do if the only copy is
+    inside the assembly.
+  -->
+  <ItemGroup Condition="'$(HsShipData)' == 'true'">
+    <None Include="$(MSBuildThisFileDirectory)data/**/*.json"
+          Link="data/%(RecursiveDir)%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

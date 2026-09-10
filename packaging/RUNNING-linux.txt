@@ -1,0 +1,17 @@
+HarmonicaScript - Linux
+
+  ./HarmonicaScript.App     graphical interface
+  ./hsc                     command line  ("./hsc --help")
+
+Nothing to install: the .NET runtime is included in this folder. The GUI needs the usual
+X11 or Wayland desktop libraries; the CLI needs nothing at all.
+
+If the executable bit did not survive extraction:
+
+  chmod +x HarmonicaScript.App hsc
+
+Note that the game itself is Windows-only. On Linux you can convert, audition and export only.
+
+data/ holds the instrument and timing profiles. They are plain JSON and you are MEANT to edit
+them - every number describing the game is inferred rather than measured. Run
+"./hsc profile dump --effective" to see where each value came from, and read docs/CALIBRATION.md.

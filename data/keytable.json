@@ -1,0 +1,638 @@
+{
+  "schemaVersion": 1,
+  "$comment": "Canonical key identity is the USB HID Usage ID (page 0x07) - decision D4. scanCode1 is PS/2 Set-1 and is mandatory: Windows SendInput must use KEYEVENTF_SCANCODE (many games ignore VK-only injection) and Razer Synapse 3 stores Set-1 in <Makecode>. 'extended' marks E0-prefixed keys.",
+  "keys": [
+    {
+      "hid": 4,
+      "name": "A",
+      "scanCode1": 30,
+      "extended": false,
+      "windowsVk": 65,
+      "ahk": "{sc01E}"
+    },
+    {
+      "hid": 5,
+      "name": "B",
+      "scanCode1": 48,
+      "extended": false,
+      "windowsVk": 66,
+      "ahk": "{sc030}"
+    },
+    {
+      "hid": 6,
+      "name": "C",
+      "scanCode1": 46,
+      "extended": false,
+      "windowsVk": 67,
+      "ahk": "{sc02E}"
+    },
+    {
+      "hid": 7,
+      "name": "D",
+      "scanCode1": 32,
+      "extended": false,
+      "windowsVk": 68,
+      "ahk": "{sc020}"
+    },
+    {
+      "hid": 8,
+      "name": "E",
+      "scanCode1": 18,
+      "extended": false,
+      "windowsVk": 69,
+      "ahk": "{sc012}"
+    },
+    {
+      "hid": 9,
+      "name": "F",
+      "scanCode1": 33,
+      "extended": false,
+      "windowsVk": 70,
+      "ahk": "{sc021}"
+    },
+    {
+      "hid": 10,
+      "name": "G",
+      "scanCode1": 34,
+      "extended": false,
+      "windowsVk": 71,
+      "ahk": "{sc022}"
+    },
+    {
+      "hid": 11,
+      "name": "H",
+      "scanCode1": 35,
+      "extended": false,
+      "windowsVk": 72,
+      "ahk": "{sc023}"
+    },
+    {
+      "hid": 12,
+      "name": "I",
+      "scanCode1": 23,
+      "extended": false,
+      "windowsVk": 73,
+      "ahk": "{sc017}"
+    },
+    {
+      "hid": 13,
+      "name": "J",
+      "scanCode1": 36,
+      "extended": false,
+      "windowsVk": 74,
+      "ahk": "{sc024}"
+    },
+    {
+      "hid": 14,
+      "name": "K",
+      "scanCode1": 37,
+      "extended": false,
+      "windowsVk": 75,
+      "ahk": "{sc025}"
+    },
+    {
+      "hid": 15,
+      "name": "L",
+      "scanCode1": 38,
+      "extended": false,
+      "windowsVk": 76,
+      "ahk": "{sc026}"
+    },
+    {
+      "hid": 16,
+      "name": "M",
+      "scanCode1": 50,
+      "extended": false,
+      "windowsVk": 77,
+      "ahk": "{sc032}"
+    },
+    {
+      "hid": 17,
+      "name": "N",
+      "scanCode1": 49,
+      "extended": false,
+      "windowsVk": 78,
+      "ahk": "{sc031}"
+    },
+    {
+      "hid": 18,
+      "name": "O",
+      "scanCode1": 24,
+      "extended": false,
+      "windowsVk": 79,
+      "ahk": "{sc018}"
+    },
+    {
+      "hid": 19,
+      "name": "P",
+      "scanCode1": 25,
+      "extended": false,
+      "windowsVk": 80,
+      "ahk": "{sc019}"
+    },
+    {
+      "hid": 20,
+      "name": "Q",
+      "scanCode1": 16,
+      "extended": false,
+      "windowsVk": 81,
+      "ahk": "{sc010}"
+    },
+    {
+      "hid": 21,
+      "name": "R",
+      "scanCode1": 19,
+      "extended": false,
+      "windowsVk": 82,
+      "ahk": "{sc013}"
+    },
+    {
+      "hid": 22,
+      "name": "S",
+      "scanCode1": 31,
+      "extended": false,
+      "windowsVk": 83,
+      "ahk": "{sc01F}"
+    },
+    {
+      "hid": 23,
+      "name": "T",
+      "scanCode1": 20,
+      "extended": false,
+      "windowsVk": 84,
+      "ahk": "{sc014}"
+    },
+    {
+      "hid": 24,
+      "name": "U",
+      "scanCode1": 22,
+      "extended": false,
+      "windowsVk": 85,
+      "ahk": "{sc016}"
+    },
+    {
+      "hid": 25,
+      "name": "V",
+      "scanCode1": 47,
+      "extended": false,
+      "windowsVk": 86,
+      "ahk": "{sc02F}"
+    },
+    {
+      "hid": 26,
+      "name": "W",
+      "scanCode1": 17,
+      "extended": false,
+      "windowsVk": 87,
+      "ahk": "{sc011}"
+    },
+    {
+      "hid": 27,
+      "name": "X",
+      "scanCode1": 45,
+      "extended": false,
+      "windowsVk": 88,
+      "ahk": "{sc02D}"
+    },
+    {
+      "hid": 28,
+      "name": "Y",
+      "scanCode1": 21,
+      "extended": false,
+      "windowsVk": 89,
+      "ahk": "{sc015}"
+    },
+    {
+      "hid": 29,
+      "name": "Z",
+      "scanCode1": 44,
+      "extended": false,
+      "windowsVk": 90,
+      "ahk": "{sc02C}"
+    },
+    {
+      "hid": 30,
+      "name": "1",
+      "scanCode1": 2,
+      "extended": false,
+      "windowsVk": 49,
+      "ahk": "{sc002}"
+    },
+    {
+      "hid": 31,
+      "name": "2",
+      "scanCode1": 3,
+      "extended": false,
+      "windowsVk": 50,
+      "ahk": "{sc003}"
+    },
+    {
+      "hid": 32,
+      "name": "3",
+      "scanCode1": 4,
+      "extended": false,
+      "windowsVk": 51,
+      "ahk": "{sc004}"
+    },
+    {
+      "hid": 33,
+      "name": "4",
+      "scanCode1": 5,
+      "extended": false,
+      "windowsVk": 52,
+      "ahk": "{sc005}"
+    },
+    {
+      "hid": 34,
+      "name": "5",
+      "scanCode1": 6,
+      "extended": false,
+      "windowsVk": 53,
+      "ahk": "{sc006}"
+    },
+    {
+      "hid": 35,
+      "name": "6",
+      "scanCode1": 7,
+      "extended": false,
+      "windowsVk": 54,
+      "ahk": "{sc007}"
+    },
+    {
+      "hid": 36,
+      "name": "7",
+      "scanCode1": 8,
+      "extended": false,
+      "windowsVk": 55,
+      "ahk": "{sc008}"
+    },
+    {
+      "hid": 37,
+      "name": "8",
+      "scanCode1": 9,
+      "extended": false,
+      "windowsVk": 56,
+      "ahk": "{sc009}"
+    },
+    {
+      "hid": 38,
+      "name": "9",
+      "scanCode1": 10,
+      "extended": false,
+      "windowsVk": 57,
+      "ahk": "{sc00A}"
+    },
+    {
+      "hid": 39,
+      "name": "0",
+      "scanCode1": 11,
+      "extended": false,
+      "windowsVk": 48,
+      "ahk": "{sc00B}"
+    },
+    {
+      "hid": 40,
+      "name": "Enter",
+      "scanCode1": 28,
+      "extended": false,
+      "windowsVk": 13,
+      "ahk": "{sc01C}"
+    },
+    {
+      "hid": 41,
+      "name": "Escape",
+      "scanCode1": 1,
+      "extended": false,
+      "windowsVk": 27,
+      "ahk": "{sc001}"
+    },
+    {
+      "hid": 42,
+      "name": "Backspace",
+      "scanCode1": 14,
+      "extended": false,
+      "windowsVk": 8,
+      "ahk": "{sc00E}"
+    },
+    {
+      "hid": 43,
+      "name": "Tab",
+      "scanCode1": 15,
+      "extended": false,
+      "windowsVk": 9,
+      "ahk": "{sc00F}"
+    },
+    {
+      "hid": 44,
+      "name": "Space",
+      "scanCode1": 57,
+      "extended": false,
+      "windowsVk": 32,
+      "ahk": "{sc039}"
+    },
+    {
+      "hid": 45,
+      "name": "Minus",
+      "scanCode1": 12,
+      "extended": false,
+      "windowsVk": 189,
+      "ahk": "{sc00C}"
+    },
+    {
+      "hid": 46,
+      "name": "Equal",
+      "scanCode1": 13,
+      "extended": false,
+      "windowsVk": 187,
+      "ahk": "{sc00D}"
+    },
+    {
+      "hid": 47,
+      "name": "LeftBracket",
+      "scanCode1": 26,
+      "extended": false,
+      "windowsVk": 219,
+      "ahk": "{sc01A}"
+    },
+    {
+      "hid": 48,
+      "name": "RightBracket",
+      "scanCode1": 27,
+      "extended": false,
+      "windowsVk": 221,
+      "ahk": "{sc01B}"
+    },
+    {
+      "hid": 49,
+      "name": "Backslash",
+      "scanCode1": 43,
+      "extended": false,
+      "windowsVk": 220,
+      "ahk": "{sc02B}"
+    },
+    {
+      "hid": 51,
+      "name": "Semicolon",
+      "scanCode1": 39,
+      "extended": false,
+      "windowsVk": 186,
+      "ahk": "{sc027}"
+    },
+    {
+      "hid": 52,
+      "name": "Apostrophe",
+      "scanCode1": 40,
+      "extended": false,
+      "windowsVk": 222,
+      "ahk": "{sc028}"
+    },
+    {
+      "hid": 53,
+      "name": "Grave",
+      "scanCode1": 41,
+      "extended": false,
+      "windowsVk": 192,
+      "ahk": "{sc029}"
+    },
+    {
+      "hid": 54,
+      "name": "Comma",
+      "scanCode1": 51,
+      "extended": false,
+      "windowsVk": 188,
+      "ahk": "{sc033}"
+    },
+    {
+      "hid": 55,
+      "name": "Period",
+      "scanCode1": 52,
+      "extended": false,
+      "windowsVk": 190,
+      "ahk": "{sc034}"
+    },
+    {
+      "hid": 56,
+      "name": "Slash",
+      "scanCode1": 53,
+      "extended": false,
+      "windowsVk": 191,
+      "ahk": "{sc035}"
+    },
+    {
+      "hid": 57,
+      "name": "CapsLock",
+      "scanCode1": 58,
+      "extended": false,
+      "windowsVk": 20,
+      "ahk": "{sc03A}"
+    },
+    {
+      "hid": 58,
+      "name": "F1",
+      "scanCode1": 59,
+      "extended": false,
+      "windowsVk": 112,
+      "ahk": "{sc03B}"
+    },
+    {
+      "hid": 59,
+      "name": "F2",
+      "scanCode1": 60,
+      "extended": false,
+      "windowsVk": 113,
+      "ahk": "{sc03C}"
+    },
+    {
+      "hid": 60,
+      "name": "F3",
+      "scanCode1": 61,
+      "extended": false,
+      "windowsVk": 114,
+      "ahk": "{sc03D}"
+    },
+    {
+      "hid": 61,
+      "name": "F4",
+      "scanCode1": 62,
+      "extended": false,
+      "windowsVk": 115,
+      "ahk": "{sc03E}"
+    },
+    {
+      "hid": 62,
+      "name": "F5",
+      "scanCode1": 63,
+      "extended": false,
+      "windowsVk": 116,
+      "ahk": "{sc03F}"
+    },
+    {
+      "hid": 63,
+      "name": "F6",
+      "scanCode1": 64,
+      "extended": false,
+      "windowsVk": 117,
+      "ahk": "{sc040}"
+    },
+    {
+      "hid": 64,
+      "name": "F7",
+      "scanCode1": 65,
+      "extended": false,
+      "windowsVk": 118,
+      "ahk": "{sc041}"
+    },
+    {
+      "hid": 65,
+      "name": "F8",
+      "scanCode1": 66,
+      "extended": false,
+      "windowsVk": 119,
+      "ahk": "{sc042}"
+    },
+    {
+      "hid": 66,
+      "name": "F9",
+      "scanCode1": 67,
+      "extended": false,
+      "windowsVk": 120,
+      "ahk": "{sc043}"
+    },
+    {
+      "hid": 67,
+      "name": "F10",
+      "scanCode1": 68,
+      "extended": false,
+      "windowsVk": 121,
+      "ahk": "{sc044}"
+    },
+    {
+      "hid": 68,
+      "name": "F11",
+      "scanCode1": 87,
+      "extended": false,
+      "windowsVk": 122,
+      "ahk": "{sc057}"
+    },
+    {
+      "hid": 69,
+      "name": "F12",
+      "scanCode1": 88,
+      "extended": false,
+      "windowsVk": 123,
+      "ahk": "{sc058}"
+    },
+    {
+      "hid": 79,
+      "name": "Right",
+      "scanCode1": 77,
+      "extended": true,
+      "windowsVk": 39,
+      "ahk": "{sc04D}"
+    },
+    {
+      "hid": 80,
+      "name": "Left",
+      "scanCode1": 75,
+      "extended": true,
+      "windowsVk": 37,
+      "ahk": "{sc04B}"
+    },
+    {
+      "hid": 81,
+      "name": "Down",
+      "scanCode1": 80,
+      "extended": true,
+      "windowsVk": 40,
+      "ahk": "{sc050}"
+    },
+    {
+      "hid": 82,
+      "name": "Up",
+      "scanCode1": 72,
+      "extended": true,
+      "windowsVk": 38,
+      "ahk": "{sc048}"
+    },
+    {
+      "hid": 224,
+      "name": "LeftCtrl",
+      "scanCode1": 29,
+      "extended": false,
+      "windowsVk": 162,
+      "ahk": "{sc01D}"
+    },
+    {
+      "hid": 225,
+      "name": "LeftShift",
+      "scanCode1": 42,
+      "extended": false,
+      "windowsVk": 160,
+      "ahk": "{sc02A}"
+    },
+    {
+      "hid": 226,
+      "name": "LeftAlt",
+      "scanCode1": 56,
+      "extended": false,
+      "windowsVk": 164,
+      "ahk": "{sc038}"
+    },
+    {
+      "hid": 227,
+      "name": "LeftGui",
+      "scanCode1": 91,
+      "extended": true,
+      "windowsVk": 91,
+      "ahk": "{sc05B}"
+    },
+    {
+      "hid": 228,
+      "name": "RightCtrl",
+      "scanCode1": 29,
+      "extended": true,
+      "windowsVk": 163,
+      "ahk": "{sc01D}"
+    },
+    {
+      "hid": 229,
+      "name": "RightShift",
+      "scanCode1": 54,
+      "extended": false,
+      "windowsVk": 161,
+      "ahk": "{sc036}"
+    },
+    {
+      "hid": 230,
+      "name": "RightAlt",
+      "scanCode1": 56,
+      "extended": true,
+      "windowsVk": 165,
+      "ahk": "{sc038}"
+    }
+  ],
+  "mouse": [
+    {
+      "button": "Left",
+      "razer3": null,
+      "ahk": "LButton",
+      "winDown": "0x0002",
+      "winUp": "0x0004"
+    },
+    {
+      "button": "Right",
+      "razer3": null,
+      "ahk": "RButton",
+      "winDown": "0x0008",
+      "winUp": "0x0010"
+    },
+    {
+      "button": "Middle",
+      "razer3": null,
+      "ahk": "MButton",
+      "winDown": "0x0020",
+      "winUp": "0x0040"
+    }
+  ],
+  "$mouseComment": "razer3 is null for right and middle ON PURPOSE. The one verified real Synapse 3 macro contains keyboard events and the left button only; the right/middle encodings are unknown. Exporters refuse with a named missing capability rather than guessing - a guess here produces a file that imports successfully and then plays the wrong button."
+}

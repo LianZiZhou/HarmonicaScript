@@ -1,0 +1,93 @@
+# The developer has no Windows machine and ACE bans VMs, so this free runner is the
+# only place most of the Windows path can be exercised at all. Its job is to shrink the
+# unverifiable surface down to literally one question: does Delta Force accept injected
+# input. Nothing here involves the game.
+name: windows
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  # M0 spike (b), part 1: the artefact must be produced ON macOS, because that is the
+  # only machine that will ever cut a release. Building it on Windows would prove nothing.
+  cross-publish:
+    name: cross-publish win-x64 from macOS
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Publish CLI (win-x64, self-contained, portable)
+        run: >
+          dotnet publish src/HarmonicaScript.Cli -c Release -r win-x64 --self-contained true
+          -p:PublishSingleFile=false -o artifacts/win-x64/cli
+
+      - name: Publish GUI (win-x64, self-contained, portable)
+        run: >
+          dotnet publish src/HarmonicaScript.App -c Release -r win-x64 --self-contained true
+          -p:PublishSingleFile=false -o artifacts/win-x64/app
+
+      # Decision D2: DryWetMidi's build/*.targets copies Native32.dll / Native64.dll /
+      # Native64.dylib into every output dir on every platform. ExcludeAssets="build"
+      # strips them. If that ever regresses we ship three useless native blobs and,
+      # worse, re-open the door to the Multimedia layer we deliberately do not use.
+      - name: Assert no DryWetMidi native blobs leaked
+        run: |
+          leaks=$(find artifacts/win-x64 \( -iname 'Native32*' -o -iname 'Native64*' \) -print)
+          if [ -n "$leaks" ]; then echo "::error::DryWetMidi native blobs leaked:"; echo "$leaks"; exit 1; fi
+          echo "clean: no native blobs"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: win-x64
+          path: artifacts/win-x64
+          retention-days: 7
+
+  # M0 spike (b), part 2: the macOS-produced exe must actually LAUNCH on real Windows.
+  # This is the check that catches a cross-compilation regression before a user does.
+  windows-smoke:
+    name: launch macOS-built exe on Windows
+    needs: cross-publish
+    runs-on: windows-2025
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: win-x64
+          path: artifacts
+
+      - name: CLI launches
+        shell: pwsh
+        run: |
+          & artifacts\cli\hsc.exe
+          if ($LASTEXITCODE -ne 0) { throw "hsc.exe exited $LASTEXITCODE" }
+          Write-Host "hsc.exe launched on Windows"
+
+      # Renders a real window on a real Windows desktop session and exits 0.
+      - name: GUI renders a window
+        shell: pwsh
+        run: |
+          & artifacts\app\HarmonicaScript.App.exe --smoke
+          if ($LASTEXITCODE -ne 0) { throw "App --smoke exited $LASTEXITCODE" }
+
+  # Native Windows build+test. From M9 this job also drives SendInput into a real Win32
+  # window, executes the generated .ahk with Send stubbed, and records scheduler p99
+  # deadline error.
+  windows-native:
+    name: build+test on Windows
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - run: dotnet build HarmonicaScript.slnx -c Release
+      - run: dotnet test HarmonicaScript.slnx -c Release --no-build

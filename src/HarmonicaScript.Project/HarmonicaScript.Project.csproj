@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../HarmonicaScript.Core/HarmonicaScript.Core.csproj" />
+    <ProjectReference Include="../HarmonicaScript.Profiles/HarmonicaScript.Profiles.csproj" />
+    <ProjectReference Include="../HarmonicaScript.Midi/HarmonicaScript.Midi.csproj" />
+    <ProjectReference Include="../HarmonicaScript.Export/HarmonicaScript.Export.csproj" />
+    <ProjectReference Include="../HarmonicaScript.Audition/HarmonicaScript.Audition.csproj" />
+  </ItemGroup>
+</Project>

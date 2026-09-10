@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../../src/HarmonicaScript.Midi/HarmonicaScript.Midi.csproj" />
+    <ProjectReference Include="../../src/HarmonicaScript.Core/HarmonicaScript.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/HarmonicaScript.Profiles/HarmonicaScript.Profiles.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="Verify.XunitV3" />
+  </ItemGroup>
+</Project>

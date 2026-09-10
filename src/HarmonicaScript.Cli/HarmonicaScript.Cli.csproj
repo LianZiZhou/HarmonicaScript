@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <HsShipData>true</HsShipData>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>hsc</AssemblyName>
+    <RootNamespace>HarmonicaScript.Cli</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../HarmonicaScript.Core/HarmonicaScript.Core.csproj" />
+    <ProjectReference Include="../HarmonicaScript.Profiles/HarmonicaScript.Profiles.csproj" />
+    <ProjectReference Include="../HarmonicaScript.Midi/HarmonicaScript.Midi.csproj" />
+    <ProjectReference Include="../HarmonicaScript.Export/HarmonicaScript.Export.csproj" />
+    <ProjectReference Include="../HarmonicaScript.Playback/HarmonicaScript.Playback.csproj" />
+    <ProjectReference Include="../HarmonicaScript.Playback.Windows/HarmonicaScript.Playback.Windows.csproj" />
+    <ProjectReference Include="../HarmonicaScript.Playback.MacOs/HarmonicaScript.Playback.MacOs.csproj" />
+    <ProjectReference Include="../HarmonicaScript.Project/HarmonicaScript.Project.csproj" />
+    <ProjectReference Include="../HarmonicaScript.Audition/HarmonicaScript.Audition.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" />
+  </ItemGroup>
+</Project>

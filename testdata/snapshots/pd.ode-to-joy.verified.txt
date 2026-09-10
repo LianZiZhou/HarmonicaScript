@@ -1,0 +1,79 @@
+transpose        0
+keyDistance      0
+hardInfeasible   0
+musicalLossPpm   0
+grade            A (100)
+notes            30/30
+dropped/folded   0/0
+merged/shifted   0/0
+modifierEvents   0
+exclusiveSwaps   0
+totalEvents      60
+durationMs       15938
+
+counters
+  fit.search.candidates              45
+  reduce.iterations                  1
+  sched.breath.inserted              1
+
+first 60 events
+         0 NoteDown     C        down  note=0
+       469 NoteUp       C        up    note=0
+       500 NoteDown     C        down  note=1
+       969 NoteUp       C        up    note=1
+      1000 NoteDown     V        down  note=2
+      1469 NoteUp       V        up    note=2
+      1500 NoteDown     B        down  note=3
+      1969 NoteUp       B        up    note=3
+      2000 NoteDown     B        down  note=4
+      2469 NoteUp       B        up    note=4
+      2500 NoteDown     V        down  note=5
+      2969 NoteUp       V        up    note=5
+      3000 NoteDown     C        down  note=6
+      3469 NoteUp       C        up    note=6
+      3500 NoteDown     X        down  note=7
+      3969 NoteUp       X        up    note=7
+      4000 NoteDown     Z        down  note=8
+      4469 NoteUp       Z        up    note=8
+      4500 NoteDown     Z        down  note=9
+      4969 NoteUp       Z        up    note=9
+      5000 NoteDown     X        down  note=10
+      5469 NoteUp       X        up    note=10
+      5500 NoteDown     C        down  note=11
+      5969 NoteUp       C        up    note=11
+      6000 NoteDown     C        down  note=12
+      6703 NoteUp       C        up    note=12
+      6750 NoteDown     X        down  note=13
+      6984 NoteUp       X        up    note=13
+      7000 NoteDown     X        down  note=14
+      7910 NoteUp       X        up    note=14
+      8000 NoteDown     C        down  note=15
+      8469 NoteUp       C        up    note=15
+      8500 NoteDown     C        down  note=16
+      8969 NoteUp       C        up    note=16
+      9000 NoteDown     V        down  note=17
+      9469 NoteUp       V        up    note=17
+      9500 NoteDown     B        down  note=18
+      9969 NoteUp       B        up    note=18
+     10000 NoteDown     B        down  note=19
+     10469 NoteUp       B        up    note=19
+     10500 NoteDown     V        down  note=20
+     10969 NoteUp       V        up    note=20
+     11000 NoteDown     C        down  note=21
+     11469 NoteUp       C        up    note=21
+     11500 NoteDown     X        down  note=22
+     11969 NoteUp       X        up    note=22
+     12000 NoteDown     Z        down  note=23
+     12469 NoteUp       Z        up    note=23
+     12500 NoteDown     Z        down  note=24
+     12969 NoteUp       Z        up    note=24
+     13000 NoteDown     X        down  note=25
+     13469 NoteUp       X        up    note=25
+     13500 NoteDown     C        down  note=26
+     13969 NoteUp       C        up    note=26
+     14000 NoteDown     X        down  note=27
+     14703 NoteUp       X        up    note=27
+     14750 NoteDown     Z        down  note=28
+     14984 NoteUp       Z        up    note=28
+     15000 NoteDown     Z        down  note=29
+     15938 NoteUp       Z        up    note=29

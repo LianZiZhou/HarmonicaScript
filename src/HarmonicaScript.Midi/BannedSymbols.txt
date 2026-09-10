@@ -1,0 +1,1 @@
+N:Melanchall.DryWetMidi.Multimedia;Decision D2: DryWetMidi is a file parser only. The Multimedia namespace is the device/playback layer that the stripped native blobs serve; our scheduler and IInputBackend replace it.

@@ -1,0 +1,79 @@
+transpose        0
+keyDistance      0
+hardInfeasible   0
+musicalLossPpm   0
+grade            A (100)
+notes            38/38
+dropped/folded   0/0
+merged/shifted   0/0
+modifierEvents   36
+exclusiveSwaps   0
+totalEvents      112
+durationMs       9486
+
+counters
+  fit.search.candidates              73
+  reduce.iterations                  1
+  sched.breath.inserted              1
+
+first 60 events
+         0 ModifierDown Left     down  note=-1
+        12 NoteDown     Z        down  note=0
+       232 NoteUp       Z        up    note=0
+       254 ModifierDown Middle   down  note=-1
+       262 NoteDown     Z        down  note=1
+       482 NoteUp       Z        up    note=1
+       504 ModifierUp   Middle   up    note=-1
+       512 NoteDown     X        down  note=2
+       732 NoteUp       X        up    note=2
+       754 ModifierDown Middle   down  note=-1
+       762 NoteDown     X        down  note=3
+       982 NoteUp       X        up    note=3
+      1004 ModifierUp   Middle   up    note=-1
+      1012 NoteDown     C        down  note=4
+      1232 NoteUp       C        up    note=4
+      1262 NoteDown     V        down  note=5
+      1482 NoteUp       V        up    note=5
+      1504 ModifierDown Middle   down  note=-1
+      1512 NoteDown     V        down  note=6
+      1732 NoteUp       V        up    note=6
+      1754 ModifierUp   Middle   up    note=-1
+      1762 NoteDown     B        down  note=7
+      1982 NoteUp       B        up    note=7
+      2004 ModifierDown Middle   down  note=-1
+      2012 NoteDown     B        down  note=8
+      2232 NoteUp       B        up    note=8
+      2254 ModifierUp   Middle   up    note=-1
+      2262 NoteDown     N        down  note=9
+      2482 NoteUp       N        up    note=9
+      2504 ModifierDown Middle   down  note=-1
+      2512 NoteDown     N        down  note=10
+      2732 NoteUp       N        up    note=10
+      2754 ModifierUp   Middle   up    note=-1
+      2762 NoteDown     M        down  note=11
+      2982 NoteUp       M        up    note=11
+      2996 ModifierUp   Left     up    note=-1
+      3012 NoteDown     Z        down  note=12
+      3232 NoteUp       Z        up    note=12
+      3254 ModifierDown Middle   down  note=-1
+      3262 NoteDown     Z        down  note=13
+      3482 NoteUp       Z        up    note=13
+      3504 ModifierUp   Middle   up    note=-1
+      3512 NoteDown     X        down  note=14
+      3732 NoteUp       X        up    note=14
+      3754 ModifierDown Middle   down  note=-1
+      3762 NoteDown     X        down  note=15
+      3982 NoteUp       X        up    note=15
+      4004 ModifierUp   Middle   up    note=-1
+      4012 NoteDown     C        down  note=16
+      4232 NoteUp       C        up    note=16
+      4262 NoteDown     V        down  note=17
+      4482 NoteUp       V        up    note=17
+      4504 ModifierDown Middle   down  note=-1
+      4512 NoteDown     V        down  note=18
+      4732 NoteUp       V        up    note=18
+      4754 ModifierUp   Middle   up    note=-1
+      4762 NoteDown     B        down  note=19
+      4982 NoteUp       B        up    note=19
+      5004 ModifierDown Middle   down  note=-1
+      5012 NoteDown     B        down  note=20

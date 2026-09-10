@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "df.conservative",
+  "displayName": { "zh-Hans": "保守（失败可听）", "en": "Conservative (fails audibly)" },
+  "$comment": [
+    "Roughly half the maximum note rate of df.reference. Fast passages get merged or dropped by",
+    "the articulation ladder and REPORTED, instead of being emitted and silently swallowed by the",
+    "game. Choose this when you would rather hear a problem than not know you have one."
+  ],
+
+  "sameKeyRetriggerMs":     { "v": 25,  "source": "invented (conservative)", "measured": false },
+  "keyChangeGapMs":         { "v": 30,  "source": "invented (conservative)", "measured": false },
+  "noteHoldMinMs":          { "v": 40,  "source": "invented (conservative)", "measured": false },
+  "keyHeldMinMs":           { "v": 20,  "source": "invented (conservative)", "measured": false },
+  "globalLeadMs":           { "v": 25,  "source": "ChickenD233 FixedLeadMs = 25", "measured": false },
+
+  "exclusiveSwapMs":        { "v": 28,  "source": "invented (conservative)", "measured": false },
+  "interModifierStaggerMs": { "v": 6,   "source": "invented (conservative)", "measured": false },
+  "maxOnsetShiftMs":        { "v": 20,  "source": "invented (conservative)", "measured": false },
+  "maxDriftMs":             { "v": 150, "source": "invented (conservative)", "measured": false },
+  "maxKeyHoldMs":           { "v": 4000,"source": "invented", "measured": false },
+  "maxModifierHoldMs":      { "v": 6000,"source": "invented", "measured": false },
+  "minEventSeparationMs":   { "v": 1,   "source": "invented", "measured": false },
+
+  "breathRest": { "enabled": true, "afterMs": 6000, "restMs": 120, "phraseGapMs": 180 }
+}

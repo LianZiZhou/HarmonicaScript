@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Deliberately plain net10.0 with [SupportedOSPlatform("windows")] annotations rather
+    than net10.0-windows. This keeps the whole solution buildable and testable on the
+    developer's Mac and on Linux CI, while CA1416 still enforces correct usage.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="../HarmonicaScript.Core/HarmonicaScript.Core.csproj" />
+    <ProjectReference Include="../HarmonicaScript.Profiles/HarmonicaScript.Profiles.csproj" />
+    <ProjectReference Include="../HarmonicaScript.Playback/HarmonicaScript.Playback.csproj" />
+  </ItemGroup>
+  <PropertyGroup>
+    <!--
+      The INPUT union's layout is load-bearing (40 bytes on x64) and SendInput silently ignores
+      a wrong cbSize, so these signatures are hand-written with [LibraryImport] and asserted by a
+      test rather than generated. Keeps the project on a plain net10.0 TFM, so the whole solution
+      still builds and tests on macOS.
+    -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,79 @@
+transpose        0
+keyDistance      0
+hardInfeasible   0
+musicalLossPpm   0
+grade            A (100)
+notes            48/48
+dropped/folded   0/0
+merged/shifted   0/0
+modifierEvents   0
+exclusiveSwaps   0
+totalEvents      96
+durationMs       5980
+
+counters
+  fit.search.candidates              50
+  reduce.iterations                  1
+  sched.articulate.clamped           47
+
+first 60 events
+         0 NoteDown     Z        down  note=0
+       105 NoteUp       Z        up    note=0
+       125 NoteDown     Comma    down  note=1
+       230 NoteUp       Comma    up    note=1
+       250 NoteDown     Z        down  note=2
+       355 NoteUp       Z        up    note=2
+       375 NoteDown     Comma    down  note=3
+       480 NoteUp       Comma    up    note=3
+       500 NoteDown     Z        down  note=4
+       605 NoteUp       Z        up    note=4
+       625 NoteDown     Comma    down  note=5
+       730 NoteUp       Comma    up    note=5
+       750 NoteDown     Z        down  note=6
+       855 NoteUp       Z        up    note=6
+       875 NoteDown     Comma    down  note=7
+       980 NoteUp       Comma    up    note=7
+      1000 NoteDown     Z        down  note=8
+      1105 NoteUp       Z        up    note=8
+      1125 NoteDown     Comma    down  note=9
+      1230 NoteUp       Comma    up    note=9
+      1250 NoteDown     Z        down  note=10
+      1355 NoteUp       Z        up    note=10
+      1375 NoteDown     Comma    down  note=11
+      1480 NoteUp       Comma    up    note=11
+      1500 NoteDown     Z        down  note=12
+      1605 NoteUp       Z        up    note=12
+      1625 NoteDown     Comma    down  note=13
+      1730 NoteUp       Comma    up    note=13
+      1750 NoteDown     Z        down  note=14
+      1855 NoteUp       Z        up    note=14
+      1875 NoteDown     Comma    down  note=15
+      1980 NoteUp       Comma    up    note=15
+      2000 NoteDown     Z        down  note=16
+      2105 NoteUp       Z        up    note=16
+      2125 NoteDown     Comma    down  note=17
+      2230 NoteUp       Comma    up    note=17
+      2250 NoteDown     Z        down  note=18
+      2355 NoteUp       Z        up    note=18
+      2375 NoteDown     Comma    down  note=19
+      2480 NoteUp       Comma    up    note=19
+      2500 NoteDown     Z        down  note=20
+      2605 NoteUp       Z        up    note=20
+      2625 NoteDown     Comma    down  note=21
+      2730 NoteUp       Comma    up    note=21
+      2750 NoteDown     Z        down  note=22
+      2855 NoteUp       Z        up    note=22
+      2875 NoteDown     Comma    down  note=23
+      2980 NoteUp       Comma    up    note=23
+      3000 NoteDown     Z        down  note=24
+      3105 NoteUp       Z        up    note=24
+      3125 NoteDown     Comma    down  note=25
+      3230 NoteUp       Comma    up    note=25
+      3250 NoteDown     Z        down  note=26
+      3355 NoteUp       Z        up    note=26
+      3375 NoteDown     Comma    down  note=27
+      3480 NoteUp       Comma    up    note=27
+      3500 NoteDown     Z        down  note=28
+      3605 NoteUp       Z        up    note=28
+      3625 NoteDown     Comma    down  note=29
+      3730 NoteUp       Comma    up    note=29

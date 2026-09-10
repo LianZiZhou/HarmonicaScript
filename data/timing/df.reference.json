@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "df.reference",
+  "displayName": { "zh-Hans": "参考（竞品实战调参值）", "en": "Reference (shipping tool's in-anger values)" },
+  "$comment": [
+    "THE DEFAULT. These are the constants a shipping auto-player uses in the actual game, which",
+    "makes them the only numbers on earth with any in-anger backing. They are still NOT measured:",
+    "no source documents a per-note cooldown, and if these are too fast the failure is SILENT",
+    "in game (dropped notes), not audible. Every value carries its source. See docs/CALIBRATION.md",
+    "for the six experiments that would turn 'measured': true on."
+  ],
+
+  "sameKeyRetriggerMs":     { "v": 12,  "source": "ChickenD233 downT < lu + 0.012",  "measured": false },
+  "keyChangeGapMs":         { "v": 20,  "source": "ChickenD233 prev-key cut 20ms",   "measured": false },
+  "noteHoldMinMs":          { "v": 20,  "source": "ChickenD233 tEnd = max(t+0.02)",  "measured": false },
+  "keyHeldMinMs":           { "v": 10,  "source": "ChickenD233 upT >= downT + 0.01", "measured": false },
+  "globalLeadMs":           { "v": 25,  "source": "ChickenD233 FixedLeadMs = 25",    "measured": false },
+
+  "exclusiveSwapMs":        { "v": 16,  "source": "invented", "measured": false },
+  "interModifierStaggerMs": { "v": 4,   "source": "invented", "measured": false },
+  "maxOnsetShiftMs":        { "v": 15,  "source": "invented", "measured": false },
+  "maxDriftMs":             { "v": 120, "source": "invented", "measured": false },
+  "maxKeyHoldMs":           { "v": 4000,"source": "invented", "measured": false },
+  "maxModifierHoldMs":      { "v": 6000,"source": "invented", "measured": false },
+  "minEventSeparationMs":   { "v": 1,   "source": "invented", "measured": false },
+
+  "breathRest": {
+    "enabled": true,
+    "afterMs": 8000,
+    "restMs": 90,
+    "phraseGapMs": 180,
+    "$comment": "Default ON. This is the one guard the reference tool added against an ACTUALLY OBSERVED in-game failure (判定粘连 on long continuous play), so defaulting it on is the fail-safe choice. Its 8s/90ms numbers are that author's guess."
+  }
+}

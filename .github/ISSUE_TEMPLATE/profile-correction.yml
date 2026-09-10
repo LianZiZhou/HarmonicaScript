@@ -1,0 +1,17 @@
+name: 配置文件修正 / Profile correction
+description: 乐器映射、按键绑定或时序参数与实际游戏不符
+labels: [profile]
+body:
+  - type: markdown
+    attributes:
+      value: 乐器和时序全部是数据。修一个字段不需要重新编译，也不需要等新版本。
+  - type: textarea
+    id: effective
+    attributes:
+      label: 当前生效配置 / Effective profile
+      description: '`hsc profile dump --effective` 的输出（它会显示每个字段来自哪一层）'
+    validations: { required: true }
+  - type: textarea
+    id: wrong
+    attributes: { label: 哪个字段错了，正确值应该是什么，你怎么知道的 }
+    validations: { required: true }

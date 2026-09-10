@@ -1,0 +1,224 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:HarmonicaScript.App.ViewModels"
+        xmlns:i18n="using:HarmonicaScript.App.I18n"
+        x:Class="HarmonicaScript.App.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Width="1180" Height="760" MinWidth="900" MinHeight="600"
+        Title="HarmonicaScript">
+
+  <Window.Styles>
+    <Style Selector="TextBlock.h">
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Margin" Value="0,12,0,4" />
+      <Setter Property="Opacity" Value="0.75" />
+    </Style>
+    <Style Selector="TextBlock.unmeasured">
+      <Setter Property="TextDecorations" Value="Underline" />
+      <Setter Property="Foreground" Value="#C77800" />
+    </Style>
+    <Style Selector="Border.card">
+      <Setter Property="Padding" Value="14" />
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="Background" Value="#14808080" />
+      <Setter Property="Margin" Value="0,0,0,10" />
+    </Style>
+  </Window.Styles>
+
+  <DockPanel>
+    <!-- Top bar: language, the amber unverified badge, and the two things a stuck user needs -->
+    <Border DockPanel.Dock="Top" Padding="12,8" Background="#18808080">
+      <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto">
+        <TextBlock Grid.Column="0" Text="HarmonicaScript" FontSize="17" FontWeight="SemiBold" VerticalAlignment="Center" />
+
+        <Border Grid.Column="1" Margin="16,0" Padding="8,3" CornerRadius="4"
+                Background="#33C77800" HorizontalAlignment="Left" VerticalAlignment="Center"
+                IsVisible="{Binding !ProfileVerified}"
+                ToolTip.Tip="{Binding L[App_UnverifiedTip]}">
+          <TextBlock Text="{Binding L[App_Unverified]}" Foreground="#C77800" FontSize="12" />
+        </Border>
+
+        <Button Grid.Column="2" Content="{Binding L[Play_NoSound]}" Margin="4,0" />
+        <Button Grid.Column="3" Content="{Binding L[Play_Diagnostics]}" Margin="4,0" />
+        <Button Grid.Column="4" Content="{Binding L[Common_Language]}" Margin="4,0"
+                Command="{Binding ToggleLanguageCommand}" />
+      </Grid>
+    </Border>
+
+    <Border DockPanel.Dock="Bottom" Padding="12,6" Background="#18808080">
+      <TextBlock Text="{Binding Status}" Foreground="#D05050" FontSize="12" />
+    </Border>
+
+    <TabControl Margin="8">
+      <!-- ══ file and tracks ══ -->
+      <TabItem Header="{Binding L[Nav_Import]}">
+        <DockPanel Margin="8">
+          <Border DockPanel.Dock="Top" Classes="card" Height="90" x:Name="DropZone">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="8">
+              <TextBlock Text="{Binding L[Import_Drop]}" HorizontalAlignment="Center" Opacity="0.7" />
+              <Button Content="{Binding L[Import_Open]}" HorizontalAlignment="Center" Click="OnBrowse" />
+            </StackPanel>
+          </Border>
+          <TextBlock DockPanel.Dock="Top" Text="{Binding FileName}" Classes="h" />
+          <DataGrid ItemsSource="{Binding Tracks}" AutoGenerateColumns="False" IsReadOnly="False"
+                    GridLinesVisibility="Horizontal" CanUserResizeColumns="True">
+            <DataGrid.Columns>
+              <DataGridCheckBoxColumn Binding="{Binding Selected}" Width="40" />
+              <DataGridTextColumn Header="{Binding [Track_Name], Source={x:Static i18n:Loc.Instance}}" Binding="{Binding Name}" Width="*" IsReadOnly="True" />
+              <DataGridTextColumn Header="{Binding [Track_Notes], Source={x:Static i18n:Loc.Instance}}" Binding="{Binding NoteCount}" Width="90" IsReadOnly="True" />
+              <DataGridTextColumn Header="{Binding [Track_Duration], Source={x:Static i18n:Loc.Instance}}" Binding="{Binding Duration}" Width="90" IsReadOnly="True" />
+              <DataGridTextColumn Header="{Binding [Track_Range], Source={x:Static i18n:Loc.Instance}}" Binding="{Binding Range}" Width="90" IsReadOnly="True" />
+              <DataGridTextColumn Header="{Binding [Track_Polyphony], Source={x:Static i18n:Loc.Instance}}" Binding="{Binding Polyphony}" Width="100" IsReadOnly="True" />
+              <DataGridTextColumn Header="{Binding [Track_Score], Source={x:Static i18n:Loc.Instance}}" Binding="{Binding MelodyScore}" Width="100" IsReadOnly="True" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </DockPanel>
+      </TabItem>
+
+      <!-- ══ conversion settings ══ -->
+      <TabItem Header="{Binding L[Nav_Settings]}">
+        <ScrollViewer>
+          <StackPanel Margin="8" Spacing="4" MaxWidth="640" HorizontalAlignment="Left">
+            <TextBlock Text="{Binding L[Settings_TransposeMode]}" Classes="h" />
+            <ComboBox ItemsSource="{Binding TransposeModes}" SelectedItem="{Binding TransposeMode}" HorizontalAlignment="Stretch" />
+
+            <TextBlock Text="{Binding L[Settings_Transpose]}" Classes="h" />
+            <NumericUpDown Value="{Binding Transpose}" Minimum="-36" Maximum="36" Increment="1" />
+
+            <TextBlock Text="{Binding L[Settings_Speed]}" Classes="h" />
+            <StackPanel Orientation="Horizontal" Spacing="10">
+              <Slider Value="{Binding Speed}" Minimum="0.25" Maximum="2" TickFrequency="0.05" Width="380" />
+              <TextBlock Text="{Binding Speed, StringFormat={}{0:0.00}x}" VerticalAlignment="Center" />
+            </StackPanel>
+
+            <TextBlock Text="{Binding L[Settings_Reduction]}" Classes="h" />
+            <ComboBox ItemsSource="{Binding Reductions}" SelectedItem="{Binding Reduction}" HorizontalAlignment="Stretch" />
+
+            <TextBlock Text="{Binding L[Settings_OutOfRange]}" Classes="h" />
+            <ComboBox ItemsSource="{Binding OutOfRangeModes}" SelectedItem="{Binding OutOfRange}" HorizontalAlignment="Stretch" />
+
+            <TextBlock Text="{Binding L[Settings_Timing]}" Classes="h" />
+            <ComboBox ItemsSource="{Binding TimingProfiles}" SelectedItem="{Binding TimingProfile}" HorizontalAlignment="Stretch" />
+
+            <ItemsControl ItemsSource="{Binding TimingValues}" Margin="0,8,0,0">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:TimingRow">
+                  <Grid ColumnDefinitions="200,70,*" Margin="0,2">
+                    <TextBlock Grid.Column="0" Text="{Binding Name}" FontFamily="monospace" FontSize="12" />
+                    <TextBlock Grid.Column="1" Text="{Binding Value}" FontFamily="monospace" FontSize="12"
+                               Classes.unmeasured="{Binding !Measured}"
+                               ToolTip.Tip="{Binding [Settings_TimingUnmeasured], Source={x:Static i18n:Loc.Instance}}" />
+                    <TextBlock Grid.Column="2" Text="{Binding Source}" FontSize="11" Opacity="0.6" />
+                  </Grid>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Button Content="Apply" Margin="0,16,0,0" Click="OnReconvert" HorizontalAlignment="Left" />
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ══ playability report ══ -->
+      <TabItem Header="{Binding L[Nav_Report]}">
+        <ScrollViewer>
+          <StackPanel Margin="8" Spacing="2">
+            <Border Classes="card">
+              <StackPanel Spacing="8">
+                <StackPanel Orientation="Horizontal" Spacing="14">
+                  <TextBlock Text="{Binding Grade}" FontSize="42" FontWeight="Bold" />
+                  <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Playability, StringFormat={}{0}/100}" FontSize="16" />
+                    <TextBlock Text="{Binding KeptSummary}" Opacity="0.7" FontSize="12" />
+                  </StackPanel>
+                </StackPanel>
+
+                <!-- Stacked penalty bar, never a bare number: the breakdown is what tells the
+                     user which setting to change. -->
+                <ItemsControl ItemsSource="{Binding Penalties}">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate><StackPanel Orientation="Horizontal" /></ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:PenaltySegment">
+                      <Border Height="22" Background="#66C05050" Margin="0,0,2,0"
+                              Width="{Binding BarWidth}"
+                              ToolTip.Tip="{Binding Reason}">
+                        <TextBlock Text="{Binding Penalty, StringFormat={}-{0}}" FontSize="11"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+            </Border>
+
+            <TextBlock Text="{Binding L[Report_Ceilings]}" Classes="h" />
+            <TextBlock Text="{Binding CeilingSummary}" FontFamily="monospace" FontSize="12" TextWrapping="Wrap" />
+
+            <TextBlock Text="{Binding L[Report_Candidates]}" Classes="h" />
+            <DataGrid ItemsSource="{Binding Candidates}" AutoGenerateColumns="False" IsReadOnly="True" Height="180">
+              <DataGrid.Columns>
+                <DataGridTextColumn Header="t" Binding="{Binding Transpose}" Width="60" />
+                <DataGridTextColumn Header="infeasible" Binding="{Binding Infeasible}" Width="100" />
+                <DataGridTextColumn Header="loss" Binding="{Binding Loss}" Width="90" />
+                <DataGridTextColumn Header="key dist" Binding="{Binding KeyDistance}" Width="90" />
+                <DataGridTextColumn Header="mech" Binding="{Binding Mechanical}" Width="100" />
+                <DataGridCheckBoxColumn Header="chosen" Binding="{Binding IsChosen}" Width="80" />
+              </DataGrid.Columns>
+            </DataGrid>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ══ note editor ══ -->
+      <TabItem Header="{Binding L[Nav_Editor]}">
+        <DockPanel Margin="8">
+          <CheckBox DockPanel.Dock="Top" Content="{Binding L[Report_OnlyProblems]}" IsChecked="{Binding OnlyProblems}" Margin="0,0,0,8" />
+          <DataGrid ItemsSource="{Binding Notes}" AutoGenerateColumns="False" IsReadOnly="True"
+                    GridLinesVisibility="Horizontal" CanUserResizeColumns="True" CanUserSortColumns="True">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="#" Binding="{Binding Id}" Width="60" />
+              <DataGridTextColumn Header="{Binding [Editor_Time], Source={x:Static i18n:Loc.Instance}}" Binding="{Binding Time}" Width="110" />
+              <DataGridTextColumn Header="{Binding [Editor_Degree], Source={x:Static i18n:Loc.Instance}}" Binding="{Binding Degree}" Width="70" />
+              <DataGridTextColumn Header="{Binding [Editor_Octave], Source={x:Static i18n:Loc.Instance}}" Binding="{Binding Octave}" Width="70" />
+              <DataGridTextColumn Header="{Binding [Editor_Key], Source={x:Static i18n:Loc.Instance}}" Binding="{Binding Key}" Width="70" />
+              <DataGridTextColumn Header="{Binding [Editor_Modifiers], Source={x:Static i18n:Loc.Instance}}" Binding="{Binding Modifiers}" Width="140" />
+              <DataGridTextColumn Header="{Binding [Editor_Source], Source={x:Static i18n:Loc.Instance}}" Binding="{Binding SourceMidiNote}" Width="80" />
+              <DataGridTextColumn Header="{Binding [Editor_Delta], Source={x:Static i18n:Loc.Instance}}" Binding="{Binding Delta}" Width="70" />
+              <DataGridTextColumn Header="{Binding [Editor_Flags], Source={x:Static i18n:Loc.Instance}}" Binding="{Binding Flags}" Width="*" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </DockPanel>
+      </TabItem>
+
+      <!-- ══ rehearsal ══ -->
+      <TabItem Header="{Binding L[Nav_Rehearse]}">
+        <ContentControl x:Name="RehearsalHost" Margin="8" />
+      </TabItem>
+
+      <!-- ══ export ══ -->
+      <TabItem Header="{Binding L[Nav_Export]}">
+        <StackPanel Margin="8" Spacing="8" MaxWidth="720" HorizontalAlignment="Left">
+          <TextBlock Text="{Binding L[Export_Target]}" Classes="h" />
+          <ComboBox ItemsSource="{Binding ExportTargets}" SelectedItem="{Binding ExportTarget}" HorizontalAlignment="Stretch" />
+          <Button Content="{Binding L[Export_Write]}" Command="{Binding ExportCommand}" HorizontalAlignment="Left" />
+          <TextBlock Text="{Binding ExportMessage}" TextWrapping="Wrap" FontSize="12" Opacity="0.85" />
+        </StackPanel>
+      </TabItem>
+
+      <!-- ══ play ══ -->
+      <TabItem Header="{Binding L[Nav_Play]}">
+        <StackPanel Margin="8" Spacing="10">
+          <Border Classes="card" Background="#33C05050">
+            <TextBlock Text="{Binding L[Play_Banner]}" TextWrapping="Wrap" />
+          </Border>
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <Button Content="{Binding L[Play_Start]}" />
+            <Button Content="{Binding L[Play_Stop]}" />
+          </StackPanel>
+        </StackPanel>
+      </TabItem>
+    </TabControl>
+  </DockPanel>
+</Window>

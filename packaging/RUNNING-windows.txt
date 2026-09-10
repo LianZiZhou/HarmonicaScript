@@ -1,0 +1,16 @@
+HarmonicaScript - Windows
+
+  HarmonicaScript.App.exe   graphical interface
+  hsc.exe                   command line  ("hsc --help")
+
+Nothing to install: the .NET runtime is included in this folder.
+
+SmartScreen will warn about an unsigned binary the first time you run it. Choose
+「更多信息」/ "More info", then 「仍要运行」/ "Run anyway". The build is unsigned because
+Azure Artifact Signing is restricted to US/CA/EU/UK business entities, and since 2024 even an
+EV certificate no longer buys a SmartScreen bypass on first download. Verify the SHA256 from
+the release page instead.
+
+data\ holds the instrument and timing profiles. They are plain JSON and you are MEANT to edit
+them - every number describing the game is inferred rather than measured. Run
+"hsc profile dump --effective" to see where each value came from, and read docs\CALIBRATION.md.

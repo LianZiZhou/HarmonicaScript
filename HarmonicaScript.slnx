@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/HarmonicaScript.App/HarmonicaScript.App.csproj" />
+    <Project Path="src/HarmonicaScript.Audition/HarmonicaScript.Audition.csproj" />
+    <Project Path="src/HarmonicaScript.Cli/HarmonicaScript.Cli.csproj" />
+    <Project Path="src/HarmonicaScript.Core/HarmonicaScript.Core.csproj" />
+    <Project Path="src/HarmonicaScript.Export/HarmonicaScript.Export.csproj" />
+    <Project Path="src/HarmonicaScript.Midi/HarmonicaScript.Midi.csproj" />
+    <Project Path="src/HarmonicaScript.Playback.MacOs/HarmonicaScript.Playback.MacOs.csproj" />
+    <Project Path="src/HarmonicaScript.Playback.Windows/HarmonicaScript.Playback.Windows.csproj" />
+    <Project Path="src/HarmonicaScript.Playback/HarmonicaScript.Playback.csproj" />
+    <Project Path="src/HarmonicaScript.Profiles/HarmonicaScript.Profiles.csproj" />
+    <Project Path="src/HarmonicaScript.Project/HarmonicaScript.Project.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/HarmonicaScript.Core.Tests/HarmonicaScript.Core.Tests.csproj" />
+    <Project Path="tests/HarmonicaScript.Export.Tests/HarmonicaScript.Export.Tests.csproj" />
+    <Project Path="tests/HarmonicaScript.Midi.Tests/HarmonicaScript.Midi.Tests.csproj" />
+    <Project Path="tests/HarmonicaScript.Playback.Tests/HarmonicaScript.Playback.Tests.csproj" />
+    <Project Path="tests/HarmonicaScript.Policy.Tests/HarmonicaScript.Policy.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -292,3 +292,88 @@ publishes them to a GitHub Release versioned by the commit's short hash.
   build behind a permanent download link.
 - **Old releases are never deleted.** Deleting is irreversible and was not asked for; if the
   releases page gets noisy, prune with `gh release delete`.
+
+---
+
+## Publishing to GitHub
+
+Repository: **[LianZiZhou/HarmonicaScript](https://github.com/LianZiZhou/HarmonicaScript)**, public,
+MIT. Pushed with the local osxkeychain credential (`gho_…`, scopes `repo` + `workflow`).
+
+### Checked before anything became public
+
+Scanned the tree for secret-shaped strings (none), email addresses (none) and local absolute
+paths — which found two. `docs/design/PLAN.md` and `solutionLayout.md` carried
+`/Users/lianzhou/...` paths and dead session-scratchpad references. Rewritten to repo-relative
+paths before the first commit, so the macOS username never entered public history.
+
+### Three real bugs in my own CI, found by running it
+
+The first push produced `ci: success`, `release: success`, `windows: failure`. The Windows job is
+precisely the one thing that cannot be checked from this machine, so each failure was worth the
+round trip.
+
+1. **The CLI smoke check asserted the wrong exit code.** It ran `hsc.exe` with no arguments and
+   required 0. With System.CommandLine a root command invoked without a subcommand prints help
+   and exits **1 by design** — so the check tested nothing and failed for an unrelated reason.
+   Replaced with three checks that do real work: `--version`, `targets`, and `profile candidates`
+   asserting the exact emission table. The last two only pass if the exe found and parsed its own
+   `data/`, which is what the job is actually for.
+
+2. **My replacement contained a PowerShell bug.** `-match`/`-notmatch` against a string **array**
+   filters the array rather than returning a boolean, so `if ($lines -notmatch 'x')` is truthy
+   whenever *any* line fails to match — i.e. essentially always. Caught by reading the code back
+   before pushing; fixed with `-join`.
+
+3. **`&` does not wait for a WinExe.** The GUI check ran `& HarmonicaScript.App.exe --smoke` and
+   read `$LASTEXITCODE`. Because the app is a `WinExe`, PowerShell's call operator returns
+   immediately and never sets it. The log makes the diagnosis unambiguous — the exception is
+   printed *before* the app's own success line:
+
+   ```
+   Exception: ... App --smoke exited          <- $LASTEXITCODE empty
+   SMOKE OK: window rendered 1028x749 on Microsoft Windows 10.0.26100 / X64
+   ```
+
+   The app was fine; the check was not. Now uses `Start-Process -PassThru` with an explicit
+   `WaitForExit(120s)`, takes the real exit code, **and** asserts the app reported a rendered
+   window — so a silent exit 0 with no window can no longer pass either.
+
+### M0 spike (b) part 2 is now genuinely closed
+
+The half that needed hardware this machine does not have is proven on a real Windows runner:
+
+```
+hsc.exe version: 0.9.0+9d2889b...
+macOS-built exe loaded its profiles correctly on Windows
+SMOKE OK: window rendered 1028x749 on Microsoft Windows 10.0.26100 / X64 / runtime 10.0.12 / Avalonia 11.3.21.0
+```
+
+A win-x64 executable **cross-published on macOS** launches on Windows, resolves its own `data/`
+profiles, reports the expected emission table (6 states, 38 offsets, 48 renderings), and renders
+a window.
+
+### End-to-end verification of a published artefact
+
+Downloaded `HarmonicaScript-afea37f-osx-arm64.zip` from the release page, verified its SHA256
+against the published `SHA256SUMS.txt` (`OK`), extracted it, and ran it with `PATH` and
+`DOTNET_ROOT` unset. It resolved `data/`, converted a MIDI and printed the expected report.
+
+### Notes
+
+- `/releases/latest` returns nothing, by design: every build is a prerelease and that endpoint
+  excludes them. Use `/releases` or the releases page.
+- The SDK appends `+<full sha>` to `InformationalVersion` by default, which doubled up with the
+  short hash the workflow already sets. `IncludeSourceRevisionInInformationalVersion=false`.
+
+### One more self-inflicted bug, and a test so it cannot recur
+
+Writing that fix, I put `--version` inside an XML comment in `Directory.Build.props`. **An XML
+comment may not contain a double hyphen**, so the file became unparseable — and MSBuild reported
+it as `RestoreTask returned false but logged no error`, followed by
+`NETSDK1013: TargetFramework value "" not recognized` pointing at a *different* project and
+suggesting a typo in a property that was perfectly correct. Nothing in the output mentions XML.
+
+Caught before it was pushed, by parsing every MSBuild file with an XML parser when the symptom
+made no sense. `Policy.Tests/BuildFileTests` now does that on every run and names the offending
+line, with the hint about `--` attached to the failure message.

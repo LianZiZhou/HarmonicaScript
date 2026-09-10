@@ -6,6 +6,14 @@
 
     <!-- CI overrides InformationalVersion with 0.9.0+<short sha>; this is the local default. -->
     <VersionPrefix>0.9.0</VersionPrefix>
+
+    <!--
+      The SDK appends "+<full commit sha>" to InformationalVersion by default. Since the release
+      workflow already sets an explicit "0.9.0+<short sha>", leaving this on produces a doubled
+      suffix like 0.9.0+afea37f.afea37fb4f6df... Turning it off keeps the reported version clean
+      whether or not CI supplied one.
+    -->
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 

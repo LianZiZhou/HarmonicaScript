@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleInfoDictionaryVersion</key>   <string>6.0</string>
+  <key>CFBundlePackageType</key>             <string>APPL</string>
+  <key>CFBundleName</key>                    <string>HarmonicaScript</string>
+  <key>CFBundleDisplayName</key>             <string>HarmonicaScript</string>
+  <key>CFBundleIdentifier</key>              <string>io.github.lianzizhou.harmonicascript</string>
+  <key>CFBundleExecutable</key>              <string>HarmonicaScript</string>
+  <key>CFBundleShortVersionString</key>      <string>0.9.0</string>
+  <key>CFBundleVersion</key>                 <string>__VERSION__</string>
+  <key>LSMinimumSystemVersion</key>          <string>12.0</string>
+  <key>NSHighResolutionCapable</key>         <true/>
+  <key>LSApplicationCategoryType</key>       <string>public.app-category.music</string>
+  <key>CFBundleDocumentTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeName</key>            <string>MIDI file</string>
+      <key>CFBundleTypeRole</key>            <string>Viewer</string>
+      <key>LSItemContentTypes</key>
+      <array>
+        <string>public.midi-audio</string>
+      </array>
+    </dict>
+  </array>
+</dict>
+</plist>

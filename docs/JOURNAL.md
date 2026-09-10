@@ -377,3 +377,63 @@ suggesting a typo in a property that was perfectly correct. Nothing in the outpu
 Caught before it was pushed, by parsing every MSBuild file with an XML parser when the symptom
 made no sense. `Policy.Tests/BuildFileTests` now does that on every run and names the offending
 line, with the hint about `--` attached to the failure message.
+
+---
+
+## The macOS "this Mac does not support this application" bug
+
+The first macOS artefact could not be opened at all: 「你无法打开应用程序
+"HarmonicaScript.App.app"，因为这台 Mac 不支持此应用程序。」 The binary was correct; **the
+filename was the whole problem.**
+
+The GUI project is `HarmonicaScript.App`, so its apphost shipped as a plain file named
+`HarmonicaScript.App`. macOS matches file extensions **case-insensitively**, so `.App` is `.app` —
+and a `.app` must be a *directory* containing `Contents/MacOS/<executable>`. Finder classified the
+file as an application, found a file where a directory was required, and refused it with a message
+that mentions neither bundles nor filenames.
+
+Proven with Spotlight metadata rather than guessed:
+
+| file | `kMDItemContentType` |
+|---|---|
+| `HarmonicaScript.App` | `com.apple.application-file` → `com.apple.application` |
+| `hsc` (byte-identical binary) | `public.unix-executable` |
+| an **empty** file named `notanapp.App` | `com.apple.application-file` |
+
+The empty-file control is the one that settles it: nothing about the contents matters.
+
+### Fixed twice over
+
+1. **`<AssemblyName>HarmonicaScript</AssemblyName>`** on the GUI project. The namespace is
+   untouched; only the shipped filename changes, which removes the collision on every platform.
+2. **A real `.app` bundle for macOS**, which is the correct packaging rather than a workaround.
+   The release workflow now moves the payload into
+   `HarmonicaScript.app/Contents/MacOS/`, writes an `Info.plist` from `packaging/Info.plist`, and
+   leaves `hsc` at the top level as a relative symlink into the bundle (zipped with `-y`, so it
+   stays a symlink instead of duplicating 45 MB).
+
+Verified after a real extract: `kMDItemContentType` is now `com.apple.application-bundle`,
+`kMDItemKind` is 「应用程序」, `open -W HarmonicaScript.app --args --smoke` exits 0, and the
+`hsc` symlink converts a MIDI correctly.
+
+`Policy.Tests/ExecutableNameTests` now fails the build if any shipped executable's name ends in
+`.app`, `.bundle`, `.framework`, `.kext`, `.plugin`, `.prefpane`, `.qlgenerator` or `.xpc` —
+checked by reintroducing the old name and watching it fail.
+
+### While there: the win-x64 package is not small
+
+The suspicion that the Windows x64 zip was undersized did not survive measurement — it is the
+**largest** of the six:
+
+| target | zip | files | uncompressed |
+|---|---|---|---|
+| win-x64 | **47.68 MB** | 291 | 105 MB |
+| osx-x64 | 46.14 MB | | |
+| osx-arm64 | 46.18 MB | 290 | 113 MB |
+| win-arm64 | 43.44 MB | | |
+| linux-x64 | 43.82 MB | | |
+| linux-arm64 | 41.31 MB | | |
+
+Nothing is missing from it. The spread across targets is just per-RID native payload: Skia,
+HarfBuzz and, on Windows only, ANGLE (`av_libglesv2.dll`, ~5 MB), which is why the two Windows
+builds carry six native libraries where the others carry five.

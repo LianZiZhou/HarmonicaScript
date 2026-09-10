@@ -1,9 +1,11 @@
 HarmonicaScript - macOS
 
-  ./HarmonicaScript.App     graphical interface
+  HarmonicaScript.app       graphical interface - double-click it
   ./hsc                     command line  ("./hsc --help")
 
-Nothing to install: the .NET runtime is included in this folder.
+Nothing to install: the .NET runtime is included inside the bundle.
+
+hsc is a symlink into HarmonicaScript.app/Contents/MacOS/, so keep the two together.
 
 The build is unsigned and unnotarised, so macOS quarantines it. Clear that once, from inside
 the extracted folder:

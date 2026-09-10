@@ -103,6 +103,33 @@ jobs:
             exit 1
           fi
 
+      # macOS: wrap the payload in a real .app bundle.
+      #
+      # A .app is a DIRECTORY with Contents/MacOS/<CFBundleExecutable>. Shipping a bare Mach-O
+      # named HarmonicaScript.App instead - which is what the project name would produce - makes
+      # Finder classify it as com.apple.application and then refuse it with "this Mac does not
+      # support this application", because it is a file where a directory is required.
+      - name: Wrap in a .app bundle (macOS only)
+        if: startsWith(matrix.rid, 'osx-')
+        env:
+          SHA: ${{ steps.version.outputs.sha }}
+          RID: ${{ matrix.rid }}
+        run: |
+          set -euo pipefail
+          STAGE="stage/HarmonicaScript-$SHA-$RID"
+          APP="$STAGE/HarmonicaScript.app"
+
+          mkdir -p "$APP/Contents/MacOS"
+          # Move the payload in, leaving the documents at the top level where a user will see them.
+          find "$STAGE" -maxdepth 1 -mindepth 1 ! -name 'HarmonicaScript.app' -exec mv {} "$APP/Contents/MacOS/" \;
+
+          sed "s/__VERSION__/$SHA/" packaging/Info.plist > "$APP/Contents/Info.plist"
+
+          # A relative symlink so the CLI is reachable without digging into the bundle.
+          ln -s "HarmonicaScript.app/Contents/MacOS/hsc" "$STAGE/hsc"
+
+          plutil -lint "$APP/Contents/Info.plist"
+
       - name: Add the documents a user needs beside the binaries
         env:
           SHA: ${{ steps.version.outputs.sha }}
@@ -130,7 +157,7 @@ jobs:
           mkdir -p dist
           # zip from inside stage/ so the archive contains one top-level folder rather than
           # scattering 260 files into whatever directory the user extracted it in.
-          ( cd stage && zip -qr "../dist/HarmonicaScript-$SHA-$RID.zip" "HarmonicaScript-$SHA-$RID" )
+          ( cd stage && zip -qry "../dist/HarmonicaScript-$SHA-$RID.zip" "HarmonicaScript-$SHA-$RID" )
           ls -lh "dist/HarmonicaScript-$SHA-$RID.zip"
 
       - uses: actions/upload-artifact@v7

@@ -3,6 +3,15 @@
     <HsShipData>true</HsShipData>
     <OutputType>WinExe</OutputType>
     <RootNamespace>HarmonicaScript.App</RootNamespace>
+
+    <!--
+      NOT HarmonicaScript.App. macOS matches file extensions case-insensitively, so a plain file
+      named "HarmonicaScript.App" is classified as com.apple.application - Finder tries to open it
+      as an application BUNDLE, finds it is a file rather than the required directory, and reports
+      "this Mac does not support this application". The binary is fine; only the name was wrong.
+      The namespace is unaffected.
+    -->
+    <AssemblyName>HarmonicaScript</AssemblyName>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>

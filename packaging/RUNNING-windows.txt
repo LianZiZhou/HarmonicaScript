@@ -1,6 +1,6 @@
 HarmonicaScript - Windows
 
-  HarmonicaScript.App.exe   graphical interface
+  HarmonicaScript.exe       graphical interface
   hsc.exe                   command line  ("hsc --help")
 
 Nothing to install: the .NET runtime is included in this folder.

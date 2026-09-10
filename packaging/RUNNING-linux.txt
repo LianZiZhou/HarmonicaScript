@@ -1,6 +1,6 @@
 HarmonicaScript - Linux
 
-  ./HarmonicaScript.App     graphical interface
+  ./HarmonicaScript         graphical interface
   ./hsc                     command line  ("./hsc --help")
 
 Nothing to install: the .NET runtime is included in this folder. The GUI needs the usual
@@ -8,7 +8,7 @@ X11 or Wayland desktop libraries; the CLI needs nothing at all.
 
 If the executable bit did not survive extraction:
 
-  chmod +x HarmonicaScript.App hsc
+  chmod +x HarmonicaScript hsc
 
 Note that the game itself is Windows-only. On Linux you can convert, audition and export only.
 

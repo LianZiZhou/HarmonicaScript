@@ -120,6 +120,10 @@ dotnet publish src/HarmonicaScript.App -c Release -r win-x64 --self-contained tr
 | `osx-x64` / `osx-arm64` | 每个 zip 都是**自包含**的：内含 .NET 运行时、GUI、CLI， |
 | `linux-x64` / `linux-arm64` | 以及可编辑的 `data/` 配置目录，解压即用 |
 
+macOS 版打成真正的 `.app` bundle，`hsc` 以符号链接放在顶层。（**不能**把可执行文件直接命名为
+`HarmonicaScript.App` —— macOS 扩展名匹配不区分大小写，会把它当成 `.app` bundle，然后因为它是
+文件而不是目录而拒绝打开，报「这台 Mac 不支持此应用程序」。）
+
 六个目标全部从**同一个 ubuntu runner 交叉发布** —— 普通 IL self-contained 可以跨平台发布
 （只有 NativeAOT 不行），所以六个 runner 的矩阵只会花六倍的钱换同一个结果。这条路径与开发者
 在 Mac 上切发布用的是同一条，CI 因此验证的是真实机制而不是一个平行机制。

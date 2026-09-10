@@ -12,9 +12,17 @@ namespace HarmonicaScript.Policy.Tests;
 /// </summary>
 public sealed class ArchitectureTests
 {
-    /// <summary>The CLI's assembly is named for its command (hsc), not for its project.</summary>
-    private static string FileNameOf(string projectName) =>
-        projectName == "HarmonicaScript.Cli" ? "hsc" : projectName;
+    /// <summary>
+    /// Two projects ship under a different file name than their project name: the CLI is named
+    /// for its command, and the GUI drops the ".App" suffix because macOS would otherwise read it
+    /// as the .app bundle extension.
+    /// </summary>
+    private static string FileNameOf(string projectName) => projectName switch
+    {
+        "HarmonicaScript.Cli" => "hsc",
+        "HarmonicaScript.App" => "HarmonicaScript",
+        _ => projectName,
+    };
 
     private static ModuleDefinition Module(string assemblyName)
     {

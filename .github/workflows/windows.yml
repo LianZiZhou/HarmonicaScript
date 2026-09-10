@@ -92,11 +92,34 @@ jobs:
           Write-Host "macOS-built exe loaded its profiles correctly on Windows"
 
       # Renders a real window on a real Windows desktop session and exits 0.
+      #
+      # Start-Process rather than `&`: HarmonicaScript.App is a WinExe, so on Windows the call
+      # operator does NOT wait for it and $LASTEXITCODE is never set - which reads as a failure
+      # while the app is in fact rendering fine a moment later. This waits for the real process,
+      # takes its real exit code, and asserts on what it printed rather than only on the code.
       - name: GUI renders a window
         shell: pwsh
         run: |
-          & artifacts\app\HarmonicaScript.App.exe --smoke
-          if ($LASTEXITCODE -ne 0) { throw "App --smoke exited $LASTEXITCODE" }
+          $ErrorActionPreference = 'Stop'
+
+          $proc = Start-Process -FilePath artifacts\app\HarmonicaScript.App.exe `
+                                -ArgumentList '--smoke' `
+                                -PassThru `
+                                -RedirectStandardOutput smoke-out.txt `
+                                -RedirectStandardError smoke-err.txt
+
+          if (-not $proc.WaitForExit(120000)) {
+            $proc.Kill()
+            throw "App --smoke did not exit within 120s - the window never finished rendering"
+          }
+
+          $out = (Get-Content smoke-out.txt -Raw -ErrorAction SilentlyContinue) ?? ''
+          $err = (Get-Content smoke-err.txt -Raw -ErrorAction SilentlyContinue) ?? ''
+          Write-Host $out
+          if ($err.Trim()) { Write-Host "stderr: $err" }
+
+          if ($proc.ExitCode -ne 0) { throw "App --smoke exited $($proc.ExitCode)" }
+          if ($out -notmatch 'SMOKE OK') { throw "the app exited 0 but never reported a rendered window" }
 
   # Native Windows build+test. From M9 this job also drives SendInput into a real Win32
   # window, executes the generated .ahk with Send stubbed, and records scheduler p99

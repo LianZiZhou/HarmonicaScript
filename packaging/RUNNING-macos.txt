@@ -1,27 +1,32 @@
 HarmonicaScript - macOS
 
-  HarmonicaScript.app       graphical interface - see the note below before double-clicking
+  HarmonicaScript.app       graphical interface
   ./hsc                     command line  ("./hsc --help")
 
 Nothing to install: the .NET runtime is included inside the bundle. hsc is a symlink into
 HarmonicaScript.app/Contents/MacOS/, so keep the two together.
 
 
+EXTRACT WITH FINDER, NOT WITH `unzip`
+-------------------------------------
+Double-click the .zip in Finder. Do not extract it with the command-line `unzip`.
+
+The bundle contains .NET managed .dll files, which macOS insists are signed code but which have
+nowhere inside them to store a signature - so the signature lives in an extended attribute.
+Finder (and `ditto -x -k`) preserve those; `unzip` silently drops them and macOS then reports
+the app as damaged. If you already used `unzip`, delete the folder and extract it again.
+
+
 FIRST LAUNCH
 ------------
-This build is ad-hoc signed but NOT notarised - notarising requires a paid Apple Developer ID.
-macOS will therefore refuse the first launch of anything you downloaded with a browser. Pick one:
+This build is ad-hoc signed but NOT notarised - notarising needs a paid Apple Developer ID.
+macOS blocks the first launch of anything a browser downloaded. Either:
 
-  Right-click (or Control-click) HarmonicaScript.app, choose "Open", then "Open" again.
-  You only have to do this once.
+  Right-click (or Control-click) HarmonicaScript.app -> "Open" -> "Open". Once only.
 
-or, from the extracted folder, clear the download quarantine for everything at once:
+or clear the download quarantine for the whole folder, which works however you extracted it:
 
   xattr -dr com.apple.quarantine .
-
-If macOS instead says the app is DAMAGED and should be moved to the Trash, that is a broken
-signature rather than a Gatekeeper prompt - please open an issue, because it means the release
-was built incorrectly.
 
 
 THE GAME IS WINDOWS-ONLY

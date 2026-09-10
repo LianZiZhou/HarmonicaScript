@@ -186,7 +186,9 @@ jobs:
           # and text a user actually reads deserves to be reviewable and diffable on its own.
           cp "packaging/$RUNNING" "$STAGE/RUNNING.txt"
 
+      # Windows and Linux: an ordinary zip is fine and universally understood.
       - name: Zip
+        if: "!startsWith(matrix.rid, 'osx-')"
         env:
           SHA: ${{ steps.version.outputs.sha }}
           RID: ${{ matrix.rid }}
@@ -197,6 +199,47 @@ jobs:
           # scattering 260 files into whatever directory the user extracted it in.
           ( cd stage && zip -qry "../dist/HarmonicaScript-$SHA-$RID.zip" "HarmonicaScript-$SHA-$RID" )
           ls -lh "dist/HarmonicaScript-$SHA-$RID.zip"
+
+      # macOS: ditto, not zip.
+      #
+      # codesign insists that every .dll inside the bundle is nested code requiring a signature -
+      # `codesign --sign -` without --deep fails outright with "code object is not signed at all,
+      # In subcomponent: ...dll". But a .NET managed .dll is a PE file with nowhere to embed a
+      # signature, so --deep stores it in the com.apple.cs.CodeSignature EXTENDED ATTRIBUTE.
+      # Plain zip cannot carry extended attributes, so a zipped bundle verifies on this runner and
+      # is broken by the time the user extracts it - which is what macOS reports as "damaged".
+      #
+      # ditto is Apple's own archiver and preserves those attributes, and it is what Finder uses
+      # when a user double-clicks the archive.
+      - name: Archive with ditto (macOS only)
+        if: startsWith(matrix.rid, 'osx-')
+        env:
+          SHA: ${{ steps.version.outputs.sha }}
+          RID: ${{ matrix.rid }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          ( cd stage && ditto -c -k --sequesterRsrc --keepParent \
+              "HarmonicaScript-$SHA-$RID" "../dist/HarmonicaScript-$SHA-$RID.zip" )
+          ls -lh "dist/HarmonicaScript-$SHA-$RID.zip"
+
+      # Round-trip the archive the way a user's Finder will, and verify the signature SURVIVED.
+      # Verifying the bundle before archiving proves nothing: that is exactly the check that
+      # passed while shipping a broken download.
+      - name: Verify the signature survives the archive (macOS only)
+        if: startsWith(matrix.rid, 'osx-')
+        env:
+          SHA: ${{ steps.version.outputs.sha }}
+          RID: ${{ matrix.rid }}
+        run: |
+          set -euo pipefail
+          rm -rf roundtrip && mkdir roundtrip
+          ditto -x -k "dist/HarmonicaScript-$SHA-$RID.zip" roundtrip
+
+          APP="roundtrip/HarmonicaScript-$SHA-$RID/HarmonicaScript.app"
+          codesign --verify --deep --strict --verbose=2 "$APP"
+          codesign -dv --verbose=2 "$APP" 2>&1 | grep -E 'Signature=|Sealed Resources'
+          echo "signature survives the archive"
 
       - uses: actions/upload-artifact@v7
         with:

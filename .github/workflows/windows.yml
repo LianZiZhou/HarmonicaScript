@@ -64,12 +64,32 @@ jobs:
           name: win-x64
           path: artifacts
 
-      - name: CLI launches
+      # NOT a bare `hsc.exe`: with System.CommandLine a root command invoked with no
+      # subcommand prints help and exits 1 by design, so asserting 0 there tests nothing and
+      # fails for the wrong reason. These two do real work instead - `targets` in particular
+      # only succeeds if the exe found and parsed its own data/ profiles and key table.
+      - name: CLI launches and loads its profiles
         shell: pwsh
         run: |
-          & artifacts\cli\hsc.exe
-          if ($LASTEXITCODE -ne 0) { throw "hsc.exe exited $LASTEXITCODE" }
-          Write-Host "hsc.exe launched on Windows"
+          $ErrorActionPreference = 'Stop'
+
+          $version = & artifacts\cli\hsc.exe --version
+          if ($LASTEXITCODE -ne 0) { throw "hsc.exe --version exited $LASTEXITCODE" }
+          Write-Host "hsc.exe version: $version"
+
+          # -join is load-bearing: PowerShell's -match/-notmatch against a STRING ARRAY filters
+          # the array rather than returning a boolean, so `if ($lines -notmatch 'x')` is truthy
+          # whenever ANY line fails to match - i.e. almost always. Compare against one string.
+          $targets = (& artifacts\cli\hsc.exe targets) -join "`n"
+          if ($LASTEXITCODE -ne 0) { throw "hsc.exe targets exited $LASTEXITCODE" }
+          if ($targets -notmatch 'ahk-v2') { throw "expected ahk-v2 in the target list" }
+
+          $candidates = (& artifacts\cli\hsc.exe profile candidates) -join "`n"
+          if ($LASTEXITCODE -ne 0) { throw "hsc.exe profile candidates exited $LASTEXITCODE" }
+          if ($candidates -notmatch '6 states, offsets -12\.\.25 \(38\), 48 renderings') {
+            throw "emission table differs on Windows"
+          }
+          Write-Host "macOS-built exe loaded its profiles correctly on Windows"
 
       # Renders a real window on a real Windows desktop session and exits 0.
       - name: GUI renders a window
